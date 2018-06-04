@@ -1,0 +1,102 @@
+; Topology file fragment for KAO molecule
+; 
+; ifdef Flags
+;     AL_SURFACE_FLEXIBLE_OH: O-H bonds at the Al surface are flexible.
+;     AL_SURFACE_FREE_H: free hydroxyl hydrogens at Al surface
+;     AL_SURFACE_FREE_OH: free hydroxyl groups at Al surface
+; 
+; NOTE: For fully rigid kaolinite, use a freeze group
+;
+; Dipole of unit cell: 
+;     mu = { -12.028,   3.924,  12.913} [Debye]
+;    |mu| = 18.078 [Debye]
+;
+
+[ moleculetype ]
+; molname      nrexcl
+  KAO          3
+
+[ atoms ]
+;  nr   type  resnr   residue  name    cgnr    charge      mass
+       1 AlOK   1      KAO   AlOK    1       1.57500   26.982 
+       2 AlOK   1      KAO   AlOK    2       1.57500   26.982 
+       3 SiTK   1      KAO   SiTK    3       2.10000   28.086 
+       4 SiTK   1      KAO   SiTK    4       2.10000   28.086 
+       5 OBK    1      KAO   OBK     5      -1.05000   16.000 
+       6 OBK    1      KAO   OBK     6      -1.05000   16.000 
+       7 OBK    1      KAO   OBK     7      -1.05000   16.000 
+       8 OBK    1      KAO   OBK     8      -1.05000   16.000 
+       9 OBK    1      KAO   OBK     9      -1.05000   16.000 
+      10 OHK    1      KAO   OHK     10     -0.95000   16.000 
+      11 OHK    1      KAO   OHK     11     -0.95000   16.000 
+      12 OHK    1      KAO   OHK     12     -0.95000   16.000 
+      13 OHK    1      KAO   OHK     13     -0.95000   16.000 
+      14 HHK    1      KAO   HHK     14      0.42500    1.008 
+      15 HHK    1      KAO   HHK     15      0.42500    1.008 
+      16 HHK    1      KAO   HHK     16      0.42500    1.008 
+      17 HHK    1      KAO   HHK     17      0.42500    1.008 
+      18 AlOK   1      KAO   AlOK    18      1.57500   26.982 
+      19 AlOK   1      KAO   AlOK    19      1.57500   26.982 
+      20 SiTK   1      KAO   SiTK    20      2.10000   28.086 
+      21 SiTK   1      KAO   SiTK    21      2.10000   28.086 
+      22 OBK    1      KAO   OBK     22     -1.05000   16.000 
+      23 OBK    1      KAO   OBK     23     -1.05000   16.000 
+      24 OBK    1      KAO   OBK     24     -1.05000   16.000 
+      25 OBK    1      KAO   OBK     25     -1.05000   16.000 
+      26 OBK    1      KAO   OBK     26     -1.05000   16.000 
+      27 OHK    1      KAO   OHK     27     -0.95000   16.000 
+      28 OHK    1      KAO   OHK     28     -0.95000   16.000 
+      29 OHK    1      KAO   OHK     29     -0.95000   16.000 
+      30 OHK    1      KAO   OHK     30     -0.95000   16.000 
+      31 HHK    1      KAO   HHK     31      0.42500    1.008 
+      32 HHK    1      KAO   HHK     32      0.42500    1.008 
+      33 HHK    1      KAO   HHK     33      0.42500    1.008 
+      34 HHK    1      KAO   HHK     34      0.42500    1.008 
+
+#ifdef AL_SURFACE_FLEXIBLE_OH
+[ bonds ]
+; ai    aj    funct     b0=r0      k
+    10    14   1    0.100 231850.000
+    11    15   1    0.100 231850.000
+    12    16   1    0.100 231850.000
+    13    34   1    0.100 231850.000
+    27    31   1    0.100 231850.000
+    28    32   1    0.100 231850.000
+    29    33   1    0.100 231850.000
+    30    17   1    0.100 231850.000
+
+; Else O-H bonds are rigid
+#else
+[ constraints ]
+; ai    aj    funct     b0=r0
+    10    14   1    0.100
+    11    15   1    0.100
+    12    16   1    0.100
+    13    34   1    0.100
+    27    31   1    0.100
+    28    32   1    0.100
+    29    33   1    0.100
+    30    17   1    0.100
+
+; End #ifdef AL_SURFACE_FLEXIBLE_OH
+#endif
+
+[ angles ]
+; ai   aj   ak   funct   theta0    k_bend
+     1    12    16   1  109.470  251.040
+     1    27    31   1  109.470  251.040
+     1    28    32   1  109.470  251.040
+     1    30    17   1  109.470  251.040
+     2    11    15   1  109.470  251.040
+     2    12    16   1  109.470  251.040
+     2    27    31   1  109.470  251.040
+     2    30    17   1  109.470  251.040
+    18    10    14   1  109.470  251.040
+    18    11    15   1  109.470  251.040
+    18    13    34   1  109.470  251.040
+    18    29    33   1  109.470  251.040
+    19    10    14   1  109.470  251.040
+    19    13    34   1  109.470  251.040
+    19    28    32   1  109.470  251.040
+    19    29    33   1  109.470  251.040
+
