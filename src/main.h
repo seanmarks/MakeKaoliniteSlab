@@ -18,39 +18,16 @@
 #include <string>
 #include <vector>
 
-static const int X_DIM = 0;
-static const int Y_DIM = 1;
-static const int Z_DIM = 2;
-static const int DIM_  = 3;
-
-// Position vector
-typedef double Rvec[DIM_];
-
-using Int3  = std::array<int, DIM_>;
-using Real3 = std::array<double, DIM_>;
-
-// Apply the minimum image convention
-void minImage(const Rvec x1, const Rvec x2, const Rvec boxL, Rvec x12, double& distSq);
-void minImage(
-	const std::vector<double>& x1, 
-	const std::vector<double>& x2, 
-	const std::vector<double>& boxL, 
-	// Output
-	std::vector<double>& x12, 
-	double& distSq
-);
-
-// Keep the atom in the simulaton box
-void keepInBox(const Rvec boxL, Rvec x);
-
-void keepInBox(const std::vector<double>& boxL, std::vector<double>& x);
+#include "CommonTypes.h"
+#include "GroFileTools.h"
+#include "SimulationBox.h"
 
 // Vector norm
-double norm(const Rvec x);
+double norm(const Real3& x);
 double norm(const std::vector<double>& x);
 
 // Use the dot product to get the angle between the vectors
-double angleBetweenVectors(const Rvec a, const Rvec b);
+double angleBetweenVectors(const Real3& a, const Real3& b);
 
 // Get linear cell indx from a triple of grid indices
 int getLinearCellIndex(const Int3& grid_indices, const Int3& grid_dimensions) {

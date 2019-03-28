@@ -1,10 +1,8 @@
 // GenKaoliniteSlab.exe
 //
-// Updated Jun. 1, 2018
-//
-// - A "slab" of kaolinite is created by translating the unit cell in the xy-plane
-//   - The hexagonal rings of Si and O are parallel to the face of the slab
-// - A "layer" of kaolinite is created by stacking slabs on top of each other
+// - A "layer" of kaolinite is created by translating the unit cell in the xy-plane
+//   - The hexagonal rings of Si and O are parallel to the face of the layer
+// - A "slab" of kaolinite is created by stacking slabs on top of each other
 
 
 // Project headers
@@ -35,14 +33,15 @@ int main(int argc, char* argv[])
 	const double DEGREES_TO_RADIANS = PI/180.0;
 
 	// Kaolinite unit cell
-	double alpha = 91.926*DEGREES_TO_RADIANS;  // [rad]
-	double beta  = 105.046*DEGREES_TO_RADIANS; // [rad]
-	double gamma = 89.797*DEGREES_TO_RADIANS;  // [rad]
+	double alpha =  91.926*DEGREES_TO_RADIANS;  // [rad]
+	double beta  = 105.046*DEGREES_TO_RADIANS;  // [rad]
+	double gamma =  89.797*DEGREES_TO_RADIANS;  // [rad]
 
 	double a = 0.51535; // [nm]
 	double b = 0.89419; // [nm]
 	double c = 0.73906; // [nm]
-	std::vector<double> latticeConstants = {{ a, b, b }};
+	Real3 lattice_constants = {{ a, b, c }};
+
 
 	//----- Fractional unit cell -----//
 
@@ -50,7 +49,7 @@ int main(int argc, char* argv[])
 	// 2x Al, 2x Si, 5x O (standalone), 4x O (hydroxyl), 4x H (hydroxyl)
 	int num_atoms_per_primitive_cell = 17;
 	int num_atoms_per_unit_cell = 2*num_atoms_per_primitive_cell;
-	std::vector<std::vector<double>> fractional_unit_cell(num_atoms_per_unit_cell);
+	std::vector<Real3> fractional_unit_cell(num_atoms_per_unit_cell);
 
 	fractional_unit_cell[0]  = {{ 0.28900, 0.49660, 0.46600 }}; // Al1 (octahedral)
 	fractional_unit_cell[1]  = {{ 0.79300, 0.32880, 0.46500 }}; // Al2 (octahedral)
@@ -122,10 +121,9 @@ int main(int argc, char* argv[])
 	for ( int i=0; i<num_atoms_per_primitive_cell; ++i ) {
 		// Allocate memory for new atom's coordinates
 		int index = i + num_atoms_per_primitive_cell;
-		fractional_unit_cell[index].resize(DIM_);
 
-		for ( int j=0; j<DIM_; ++j ) {
-			fractional_unit_cell[index][j] = fractional_unit_cell[i][j] + fractional_shift[j];
+		for ( int d=0; d<DIM_; ++d ) {
+			fractional_unit_cell[index][d] = fractional_unit_cell[i][d] + fractional_shift[d];
 		}
 
 		// Extend parameter arrays
@@ -135,12 +133,14 @@ int main(int argc, char* argv[])
 	}
 
 	// Impose PBCs on the atoms outsize the (x,y,z) central unit cell
-	std::vector<double> fractional_box_lengths = { 1.0, 1.0, 1.0 };
+	Real3 fractional_box_lengths;  fractional_box_lengths.fill(1.0);
+	SimulationBox fractional_box( fractional_box_lengths );
 	for ( int i=0; i<num_atoms_per_unit_cell; ++i ) {
-		for ( int j=0; j<3; ++j ) {
-			keepInBox(fractional_box_lengths, fractional_unit_cell[i]);
+		for ( int d=0; d<3; ++d ) {
+			fractional_box.putInBox(fractional_unit_cell[i]);
 		}
 	}
+
 
 	//----- Convert to orthonormal unit cell in Cartestian coordinates-----//
 
@@ -151,79 +151,73 @@ int main(int argc, char* argv[])
 	                                   + 2.0*cos(alpha)*cos(beta)*cos(gamma));
 
 	// Transformation matrix: [M^{-1}]^T (transpose of inverse of M)
-	std::vector<std::vector<double>> inv_M(DIM_);
+	Box inv_M;
 	inv_M[0] = { a,     b*cos(gamma),  c*cos(beta)                                      };
 	inv_M[1] = { 0.0,   b*sin(gamma),  c*(cos(alpha) - cos(beta)*cos(gamma))/sin(gamma) };
 	inv_M[2] = { 0.0,   0.0,           v_unit_cell/(a*b*sin(gamma))                      };
 
 	// Parallelepiped unit cell in Cartesian coordinates
-	std::vector<std::vector<double>> unit_cell(num_atoms_per_unit_cell);
+	std::vector<Real3> unit_cell(num_atoms_per_unit_cell);
 	for ( int i=0; i<num_atoms_per_unit_cell; ++i ) {
-		unit_cell[i].assign(DIM_, 0.0);
-
-		for ( int j=0; j<DIM_; ++j ) { // x,y,z coordinates of each atom (rows of M^{-1})
+		for ( int d=0; d<DIM_; ++d ) { // x,y,z coordinates of each atom (rows of M^{-1})
 			for ( int k=0; k<DIM_; ++k ) {
-				unit_cell[i][j] += inv_M[j][k]*fractional_unit_cell[i][k];
+				unit_cell[i][d] += inv_M[d][k]*fractional_unit_cell[i][k];
 			}
 		}
 	}
 
 	// Box lengths of the orthogonal unit cell are along the diagonal of inv_M
-	std::vector<double> unit_cell_box_lengths(DIM_); // [nm]
+	Real3 unit_cell_box_lengths;  // [nm]
 	for ( int i=0; i<DIM_; ++i ) {
 		unit_cell_box_lengths[i] = inv_M[i][i];
 	}
 
 	// Adjust the atom positions so that they lie within the orthogonal unit cell
+	SimulationBox unit_cell_box(unit_cell_box_lengths);
 	for ( int i=0; i<num_atoms_per_unit_cell; ++i ) {
-		keepInBox(unit_cell_box_lengths, unit_cell[i]);
+		unit_cell_box.putInBox(unit_cell[i]);
 	}
 
 	// Shift the whole box by (-x_H, -y_H, 0.0) (H --> i=13)
 	// so that O-H bonds don't cross the boundary (purely for convenience)
-	std::vector<double> x_shift(DIM_);
 	int shiftAtom = 13;
 	double one_plus_eps = 1.01;
-	x_shift[X_DIM] = -1.0*one_plus_eps*unit_cell[shiftAtom][X_DIM];
-	x_shift[Y_DIM] = -1.0*one_plus_eps*unit_cell[shiftAtom][Y_DIM];
-	x_shift[Z_DIM] = 0.0;   // no need to shift along z
-
+	Real3 x_shift = {{ 
+		-1.0*one_plus_eps*unit_cell[shiftAtom][X_DIM], 
+		-1.0*one_plus_eps*unit_cell[shiftAtom][Y_DIM], 
+		0.0  // no need to shift along z
+	}};
 	for ( int i=0; i<num_atoms_per_unit_cell; ++i ) {
-		for ( int j=0; j<DIM_; ++j ) {
-			unit_cell[i][j] += x_shift[j];
+		for ( int d=0; d<DIM_; ++d ) {
+			unit_cell[i][d] += x_shift[d];
 		}
-
 		// Ensure everything stays in the simulation box
-		keepInBox(unit_cell_box_lengths, unit_cell[i]);
+		unit_cell_box.putInBox(unit_cell[i]);
 	}
+
 
 	//----- Dipole of the unit cell -----//
 
-	std::vector<double> unit_cell_dipole(DIM_, 0.0);
-
+	Real3 unit_cell_dipole;  unit_cell_dipole.fill(0.0);
 	for ( int i=0; i<num_atoms_per_unit_cell; ++i ) {
-		for ( int j=0; j<DIM_; ++j ) {
-			unit_cell_dipole[j] += unit_cell_atom_charges[i]*unit_cell[i][j];
+		for ( int d=0; d<DIM_; ++d ) {
+			unit_cell_dipole[d] += unit_cell_atom_charges[i]*unit_cell[i][d];
 		}
 	}
 
 	// Convert to Debyes
 	const double E_NM_PER_DEBYE = 0.0208194; // [(e*nm)/Debye]
-	for ( int j=0; j<DIM_; ++j ) { 
-		unit_cell_dipole[j] /= E_NM_PER_DEBYE; 
+	for ( int d=0; d<DIM_; ++d ) { 
+		unit_cell_dipole[d] /= E_NM_PER_DEBYE; 
 	}
 
-	//----- Make a layer of kaolinite  -----//
 
-	// Number of unit cells along x, y, and z
-	//std::vector<int> unit_cell_grid = { 11, 7, 3 };
-	//unit_cell_grid = { 1, 1, 1 };
-	//unit_cell_grid = { 4, 3, 2 };
+	//----- Make a slab of kaolinite  -----//
 
 	// Slab dimensions [nm]
-	std::vector<double> slab_lengths(DIM_);
-	for ( int j=0; j<DIM_; ++j ) {
-		slab_lengths[j] = unit_cell_grid[j]*unit_cell_box_lengths[j];
+	Real3 slab_lengths;
+	for ( int d=0; d<DIM_; ++d ) {
+		slab_lengths[d] = unit_cell_grid[d]*unit_cell_box_lengths[d];
 	}
 
 	// Make the "normal" slab
@@ -233,8 +227,8 @@ int main(int argc, char* argv[])
 	}
 	int num_atoms_per_slab = num_atoms_per_unit_cell*num_unit_cells_per_slab;
 
-	std::vector<std::vector<double>> slab(num_atoms_per_slab, std::vector<double>(DIM_));
-	std::vector<double> offset(DIM_); // Position of bottom-left corner of cell (l,m,n)
+	std::vector<Real3> slab(num_atoms_per_slab);
+	Real3 offset; // Position of bottom-left corner of cell (l,m,n)
 
 	int atom_counter = 0;
 	for ( int l=0; l<unit_cell_grid[X_DIM]; ++l ) { // cells along x
@@ -246,8 +240,8 @@ int main(int argc, char* argv[])
 
 				// Place atoms for this unit cell
 				for ( int i=0; i<num_atoms_per_unit_cell; ++i ) {
-					for ( int j=0; j<DIM_; ++j ) {
-						slab[atom_counter][j] = unit_cell[i][j] + offset[j];
+					for ( int d=0; d<DIM_; ++d ) {
+						slab[atom_counter][d] = unit_cell[i][d] + offset[d];
 					}
 					++atom_counter;
 				}
@@ -257,12 +251,12 @@ int main(int argc, char* argv[])
 
 	//----- Make a slab reflected across the xy-plane -----//
 
-	std::vector<std::vector<double>> reflected_slab(num_atoms_per_slab, std::vector<double>(DIM_));
+	std::vector<Real3> reflected_slab(num_atoms_per_slab);
 
 	for ( int i=0; i<num_atoms_per_slab; ++i ) {
 		// x and y are unchanged
-		for ( int j=0; j<Z_DIM; ++j ) {
-			reflected_slab[i][j] = slab[i][j];
+		for ( int d=0; d<Z_DIM; ++d ) {
+			reflected_slab[i][d] = slab[i][d];
 		}
 
 		// Reflect across xy-plane, and offset z so that all 
@@ -270,129 +264,57 @@ int main(int argc, char* argv[])
 		reflected_slab[i][Z_DIM] = slab_lengths[Z_DIM] - slab[i][Z_DIM];
 	}
 
-	//----- Write a GRO file for the normal slab -----//
-	
-	std::string gro_file("kaolinite_slab.gro");
-	std::ofstream ofs(gro_file);
 
-	ofs << "Kaolinite slab" << "\n";
-	ofs << "    " << num_atoms_per_slab << "\n";
+	//----- Write gro files -----//
 
+	std::string slab_title   = "Kaolinite slab";
+	std::string slab_resname = "KAO";
+	std::vector<std::string> slab_residue_names(num_atoms_per_slab, slab_resname);
+	std::vector<int>         slab_residue_numbers(num_atoms_per_slab, 1);
+
+	// Atom names
+	std::vector<std::string> slab_atom_names;    
+	slab_atom_names.reserve(num_atoms_per_slab);
 	atom_counter = 0;
-	int molecule_counter = 0;
 	for ( int i=0; i<num_unit_cells_per_slab; ++i ) {
-		// Each unit cell:
-		// 2x Al, 2x Si, 5x O (standalone), 4x O (hydroxyl), 4x H (hydroxyl)
-
-		for ( int n=0; n<num_atoms_per_unit_cell; ++n ) {
-			// Residue/Molecule number
-			ofs << std::right << std::setw(5) << molecule_counter + 1;
-
-			// Residue/Molecule name
-			ofs << std::left << std::setw(5) << "KAO";
-
-			// Atom name
-			ofs << std::right << std::setw(5) << unit_cell_atom_names[n];
-
-			// Atom number
-			ofs << std::right << std::setw(5) << atom_counter + 1;
-
-			// (x, y, z) in nm
-			for ( int j=0; j<3; ++j ) {
-				// Right-justified fixed-point number with 3 decimal places (total width: 8)
-				ofs << std::right << std::setw(8) << std::fixed << std::setprecision(3)
-				    << slab[atom_counter][j];
-			}
-
-			// Done line
-			ofs << "\n";
-
-			++atom_counter;
-		}
+		slab_atom_names.insert( slab_atom_names.end(), 
+		                        unit_cell_atom_names.begin(), unit_cell_atom_names.end() );
 	}
 
-	// Box lengths
-	for ( int j=0; j<3; ++j ) {
-		ofs << "   " << slab_lengths[j];
-	}
-	ofs << "\n";
+	// Normal slab
+	std::string slab_file("kaolinite_slab.gro");
+	GroFileTools::writeGroFile( slab_file, slab_title, slab_residue_numbers, slab_residue_names,
+	                            slab_atom_names, slab, slab_lengths );
 
-	// Done
-	ofs.close();
-
-
-	//----- Write a GRO file for the reflected slab -----//
-	
-	ofs.open("kaolinite_reflected_slab.gro");
-
-	ofs << "Kaolinite slab reflected across xy-plane" << "\n";
-	ofs << "    " << num_atoms_per_slab << "\n";
-
-	atom_counter = 0;
-	molecule_counter = 0;
-	for ( int i=0; i<num_unit_cells_per_slab; ++i ) {
-		// Each unit cell:
-		// 2x Al, 2x Si, 5x O (standalone), 4x O (hydroxyl), 4x H (hydroxyl)
-
-		for ( int n=0; n<num_atoms_per_unit_cell; ++n ) {
-			// Residue/Molecule number
-			ofs << std::right << std::setw(5) << molecule_counter + 1;
-
-			// Residue/Molecule name
-			ofs << std::left << std::setw(5) << "KAO";
-
-			// Atom name
-			ofs << std::right << std::setw(5) << unit_cell_atom_names[n];
-
-			// Atom number
-			ofs << std::right << std::setw(5) << atom_counter + 1;
-
-			// (x, y, z) in nm
-			for ( int j=0; j<DIM_; ++j ) {
-				// Right-justified fixed-point number with 3 decimal places (total width: 8)
-				ofs << std::right << std::setw(8) << std::fixed << std::setprecision(3)
-				    << reflected_slab[atom_counter][j];
-			}
-
-			// Done line
-			ofs << "\n";
-
-			++atom_counter;
-		}
-	}
-
-	// Box lengths
-	for ( int j=0; j<DIM_; ++j ) {
-		ofs << "   " << slab_lengths[j];
-	}
-	ofs << "\n";
-
-	// Done
-	ofs.close();
+	// Reflected slab
+	std::string reflected_slab_title("Kaolinite slab reflected across xy-plane");
+	std::string reflected_slab_file("kaolinite_reflected_slab.gro");
+	GroFileTools::writeGroFile( reflected_slab_file, reflected_slab_title, slab_residue_numbers, 
+	                            slab_residue_names, slab_atom_names, reflected_slab, slab_lengths );
 
 
-	//----- Write a .itp file with the "molecule" information -----//
+	//----- Write an .itp file for the slab -----//
 
 	std::string itp_file("kaolinite_slab.itp");
-	ofs.open( itp_file );
+	std::ofstream ofs( itp_file );
 
-	ofs << "; Topology file fragment for KAO molecule" << "\n";
-	ofs << "; " << "\n";
-	ofs << "; ifdef Flags" << "\n";
-	ofs << ";     AL_SURFACE_FLEXIBLE_OH: O-H bonds at the Al surface are flexible." << "\n";
-	ofs << ";     AL_SURFACE_FREE_H: free hydroxyl hydrogens at Al surface" << "\n";
-	ofs << ";     AL_SURFACE_FREE_OH: free hydroxyl groups at Al surface" << "\n";
-	ofs << "; " << "\n";
-	ofs << "; NOTE: For fully rigid kaolinite, use a freeze group" << "\n";
-	ofs << ";" << "\n";
-	ofs << "; Dipole of unit cell: " << "\n"; 
+	ofs << "; Topology file fragment for KAO molecule" << "\n"
+	    << "; " << "\n"
+	    << "; ifdef Flags" << "\n"
+	    << ";     AL_SURFACE_FLEXIBLE_OH: O-H bonds at the Al surface are flexible." << "\n"
+	    << ";     AL_SURFACE_FREE_H: free hydroxyl hydrogens at Al surface" << "\n"
+	    << ";     AL_SURFACE_FREE_OH: free hydroxyl groups at Al surface" << "\n"
+	    << "; " << "\n"
+	    << "; NOTE: For fully rigid kaolinite, use a freeze group" << "\n"
+	    << ";" << "\n"
+	    << "; Dipole of unit cell: " << "\n";
 
 	ofs << ";     mu = {";
-	for ( int j=0; j<DIM_; ++j ) {
+	for ( int d=0; d<DIM_; ++d ) {
 		ofs << std::setw(8) << std::fixed << std::setprecision(3) 
-		    << unit_cell_dipole[j];
+		    << unit_cell_dipole[d];
 
-		if ( j != Z_DIM ) { ofs << ","; }
+		if ( d != Z_DIM ) { ofs << ","; }
 	}
 	ofs << "} [Debye]" << "\n";
 
@@ -415,6 +337,7 @@ int main(int argc, char* argv[])
 
 	atom_counter = 0;
 	int charge_group_index = 0;
+	int molecule_counter   = 0;
 	for ( int i=0; i<num_unit_cells_per_slab; ++i ) {
 		// Each primitive unit cell: 17 atoms
 		//   2x Al, 2x Si, 5x O (bridging), 4x O (hydroxyl), 4x H (hydroxyl)
@@ -466,14 +389,12 @@ int main(int argc, char* argv[])
 	ofs << "\n";
 
 	// Bond potentials
-
 	// - Parameters
 	double k_bond = 231850;  // [kJ/mol*nm^2]
 	double r_0    = 0.1;     // [nm]
-
 	// - Functional forms
-	int    bond_function       = 1; // Functional form for harmonic bond
-	int    constraint_function = 1; // Constraints will generate nonbonded exclusions
+	int bond_function       = 1;  // Functional form for harmonic bond
+	int constraint_function = 1;  // Constraints will generate nonbonded exclusions
 
 	// - Relative indices of O-H bond pairs
 	std::vector<int> rel_indices_O = {  9, 10, 11, 12, 26, 27, 28, 29 };
@@ -481,17 +402,17 @@ int main(int argc, char* argv[])
 	int num_OH_bonds_per_unit_cell = rel_indices_O.size();
 
 	// - Bond section header for flexible O-H bonds
-	ofs << "#ifdef AL_SURFACE_FLEXIBLE_OH" << "\n";
-	ofs << "[ bonds ]" << "\n";
-	ofs << "; ai    aj    funct     b0=r0(nm)    k(kJ/mol/nm^2)" << "\n";
+	ofs << "#ifdef AL_SURFACE_FLEXIBLE_OH" << "\n"
+	    << "[ bonds ]" << "\n"
+	    << "; ai    aj    funct     b0=r0(nm)    k(kJ/mol/nm^2)" << "\n";
 
 	for ( int i=0; i<num_unit_cells_per_slab; ++i ) {
 		int atom_index_offset = num_atoms_per_unit_cell*i;
 		int index_O, index_H; 
 
-		for ( int j=0; j<num_OH_bonds_per_unit_cell; ++j ) {
-			index_O = atom_index_offset + rel_indices_O[j];
-			index_H = atom_index_offset + rel_indices_H[j];
+		for ( int d=0; d<num_OH_bonds_per_unit_cell; ++d ) {
+			index_O = atom_index_offset + rel_indices_O[d];
+			index_H = atom_index_offset + rel_indices_H[d];
 
 			ofs << " " << std::setw(5) << (index_O + 1)
 			    << " " << std::setw(5) << (index_H + 1)
@@ -504,17 +425,17 @@ int main(int argc, char* argv[])
 	ofs << "\n";
 
 	// - Consraints for rigid O-H bonds
-	ofs << "; Else O-H bonds are rigid" << "\n";
-	ofs << "#else" << "\n";
-	ofs << "[ constraints ]" << "\n";
-	ofs << "; ai    aj    funct     b0=r0" << "\n";
+	ofs << "; Else O-H bonds are rigid" << "\n"
+	    << "#else" << "\n"
+	    << "[ constraints ]" << "\n"
+	    << "; ai    aj    funct     b0=r0" << "\n";
 	for ( int i=0; i<num_unit_cells_per_slab; ++i ) {
 		int atom_index_offset = num_atoms_per_unit_cell*i;
 		int index_O, index_H; 
 
-		for ( int j=0; j<num_OH_bonds_per_unit_cell; ++j ) {
-			index_O = atom_index_offset + rel_indices_O[j];
-			index_H = atom_index_offset + rel_indices_H[j];
+		for ( int d=0; d<num_OH_bonds_per_unit_cell; ++d ) {
+			index_O = atom_index_offset + rel_indices_O[d];
+			index_H = atom_index_offset + rel_indices_H[d];
 
 			ofs << " " << std::setw(5) << (index_O + 1)
 			    << " " << std::setw(5) << (index_H + 1)
@@ -524,20 +445,18 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	ofs << "\n";
-	ofs << "; End #ifdef AL_SURFACE_FLEXIBLE_OH" << "\n";
-	ofs << "#endif" << "\n";
-	ofs << "\n";
+	ofs << "\n"
+	    << "; End #ifdef AL_SURFACE_FLEXIBLE_OH" << "\n"
+	    << "#endif" << "\n"
+	    << "\n";
 
 	// Bond angle potentials
-
-	ofs << "[ angles ]" << "\n";
-	ofs << "; ai   aj   ak   funct   theta0    k_bend" << "\n";
-
-	// - Parameters
 	double k_bend        = 251.04; // [kJ/mol*rad^2]
 	double theta_0       = 109.47; // [degrees]
 	int    angleFunction = 1;      // Functional form for harmonic bend 
+
+	ofs << "[ angles ]" << "\n"
+	    << "; ai   aj   ak   funct   theta0    k_bend" << "\n";
 
 	Int3 grid_indices, grid_indices_minus_x, grid_indices_plus_y;
 	int  cell_index, cell_minus_x, cell_plus_y;
@@ -664,8 +583,8 @@ int main(int argc, char* argv[])
 
 					// If in top layer, might be a free H
 					if ( n == top_layer ) {
-						for ( int j=0; j<num_surface_hydroxyl_groups; ++j ) {
-							if ( i == unit_cell_surface_H[j] ) {
+						for ( int d=0; d<num_surface_hydroxyl_groups; ++d ) {
+							if ( i == unit_cell_surface_H[d] ) {
 								// Atom is a surface H: don't freeze it
 								is_frozen = false;
 							}
@@ -696,12 +615,12 @@ int main(int argc, char* argv[])
 
 					// If in top layer, might be an H
 					if ( n == top_layer ) {
-						for ( int j=0; j<num_surface_hydroxyl_groups; ++j ) {
-							if ( i == unit_cell_surface_H[j] ) {
+						for ( int d=0; d<num_surface_hydroxyl_groups; ++d ) {
+							if ( i == unit_cell_surface_H[d] ) {
 								// Atom is a surface H: don't freeze it
 								is_frozen = false;
 							}
-							else if ( i == unit_cell_surface_O[j] ) {
+							else if ( i == unit_cell_surface_O[d] ) {
 								// Atom is a surface O: don't freeze it
 								is_frozen = false;
 							}
@@ -717,6 +636,7 @@ int main(int argc, char* argv[])
 			}
 		}
 	}
+
 
 	//----- Write a freeze group file for a single kaolinite slab -----//
 
@@ -766,9 +686,10 @@ int main(int argc, char* argv[])
 
 	ofs.close();
 
+
 	//----- Write a second freeze group file for a kaolinite bilayer -----//
 	
-	// Assumes layers (slabs) are stored consecutively
+	// Assumes layers are stored consecutively
 	std::vector<int> layer_atom_offsets = { 0, num_atoms_per_slab };
 	int num_layers = layer_atom_offsets.size();
 
@@ -820,80 +741,11 @@ int main(int argc, char* argv[])
 	ofs << "\n";
 
 	ofs.close();
-
-}
-
-
-
-// Applies the minimum image convention
-void minImage(const Rvec x1, const Rvec x2, const Rvec boxL, Rvec x12, double& dist_sq)
-{
-	dist_sq = 0.0;
-
-	for ( int d=0; d<3; d++ ) {
-		x12[d] = x2[d] - x1[d];
-		// Apply minimum image convention
-		if      ( x12[d] >  0.5*boxL[d] ) { x12[d] -= boxL[d]; }
-		else if ( x12[d] < -0.5*boxL[d] ) { x12[d] += boxL[d]; }
-
-		dist_sq += x12[d]*x12[d];
-	}
-
-	return;
-}
-
-
-
-void minImage(
-	const std::vector<double>& x1, const std::vector<double>& x2, 
-	const std::vector<double>& boxL,
-	// Output
-	std::vector<double>& x12, double& dist_sq)
-{
-	dist_sq = 0.0;
-
-	for ( int d=0; d<3; d++ ) {
-		x12[d] = x2[d] - x1[d];
-		// Apply minimum image convention
-		if      ( x12[d] >  0.5*boxL[d] ) { x12[d] -= boxL[d]; }
-		else if ( x12[d] < -0.5*boxL[d] ) { x12[d] += boxL[d]; }
-
-		dist_sq += x12[d]*x12[d];
-	}
-
-	return;
-}
-
-
-
-// Keeps the atom in the simulaton box by applying PBCs
-void keepInBox(const Rvec boxL, Rvec x)
-{
-	for ( int d=0; d<3; d++ ) {
-		// Apply minimum image convention
-		if      ( x[d] > boxL[d] ) { x[d] -= boxL[d]; }
-		else if ( x[d] < 0.0 )     { x[d] += boxL[d]; }
-	}
-
-	return;
-}
-
-
-
-void keepInBox(const std::vector<double>& boxL, std::vector<double>& x)
-{
-	for ( int d=0; d<3; d++ ) {
-		// Apply minimum image convention
-		if      ( x[d] > boxL[d] ) { x[d] -= boxL[d]; }
-		else if ( x[d] < 0.0 )     { x[d] += boxL[d]; }
-	}
-
-	return;
 }
 
 
 // Vector norm
-double norm(const Rvec x) {
+double norm(const Real3& x) {
 	return sqrt(x[0]*x[0] + x[1]*x[1] + x[2]*x[2]);
 }
 
@@ -906,7 +758,7 @@ double norm(const std::vector<double>& x) {
 
 
 // Use the dot product to get the angle between the vectors
-double angleBetweenVectors(const Rvec a, const Rvec b)
+double angleBetweenVectors(const Real3& a, const Real3& b)
 {
 	
 	double norm_a = 0.0, norm_b = 0.0, a_dot_b = 0.0;

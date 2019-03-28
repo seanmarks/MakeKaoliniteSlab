@@ -27,7 +27,11 @@
 *.lib
 
 # Build directory
-bin/*
+build/*
+
+# Backup directories (temporary)
+bck*/*
+backup*/*
 
 # Executables
 *.exe

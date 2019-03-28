@@ -14,7 +14,7 @@
 
 [ moleculetype ]
 ; molname      nrexcl
-  KAO          1
+  KAO          2
 
 [ atoms ]
 ;  nr   type  resnr   residue  name    cgnr    charge      mass
