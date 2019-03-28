@@ -9,5 +9,5 @@ declare -a files=( \
 )
 
 for file in ${files[@]}; do
-	diff -q $file ref/$file
+	diff $file ref/$file
 done

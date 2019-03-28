@@ -1,5 +1,5 @@
 #!/bin/bash
 
-program='../../bin/GenKaoliniteSlab.exe'
+program='../../bin/MakeKaoliniteSlab'
 
 $program 2 2 2

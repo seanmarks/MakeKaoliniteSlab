@@ -18,10 +18,6 @@
 #include <string>
 #include <vector>
 
-
-// Contains the indices of two atoms which constitute a pair
-typedef int Pair[2];
-
 static const int X_DIM = 0;
 static const int Y_DIM = 1;
 static const int Z_DIM = 2;
@@ -48,9 +44,6 @@ void minImage(
 void keepInBox(const Rvec boxL, Rvec x);
 
 void keepInBox(const std::vector<double>& boxL, std::vector<double>& x);
-
-// Checks whether each oxygen has 2 hydrogens
-bool areHydrogensCorrectlyPlaced(std::vector<int> hydrogenCounts);
 
 // Vector norm
 double norm(const Rvec x);

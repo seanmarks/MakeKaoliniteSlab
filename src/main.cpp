@@ -396,19 +396,22 @@ int main(int argc, char* argv[])
 	}
 	ofs << "} [Debye]" << "\n";
 
-	ofs << ";    |mu| = " << norm(unit_cell_dipole) << " [Debye]" << "\n";
-	ofs << ";" << "\n";
-	ofs << "\n";
+	ofs << ";    |mu| = " << norm(unit_cell_dipole) << " [Debye]" << "\n"
+	    << ";" << "\n"
+	    << "\n";
 
 	// "Molecule" type declaration: kaolinite (KAO)
-	ofs << "[ moleculetype ]" << "\n";
-	ofs << "; molname      nrexcl" << "\n";
-	ofs << "  KAO          3" << "\n";
-	ofs << "\n";
+	// - vdW and Coulombic interactions are excluded for 1-2 and 1-3 bonded atoms
+	int nrexcl = 2;
+	std::string molname = "KAO";
+	ofs << "[ moleculetype ]" << "\n"
+	    << "; molname      nrexcl" << "\n"
+	    << "  " << molname << "          " << nrexcl << "\n"
+	    << "\n";
 
 	// Atoms in molecule
-	ofs << "[ atoms ]" << "\n";
-	ofs << ";  nr   type  resnr   residue  name    cgnr    charge      mass" << "\n";
+	ofs << "[ atoms ]" << "\n"
+	    << ";  nr   type  resnr   residue  name    cgnr    charge      mass" << "\n";
 
 	atom_counter = 0;
 	int charge_group_index = 0;
@@ -887,21 +890,6 @@ void keepInBox(const std::vector<double>& boxL, std::vector<double>& x)
 
 	return;
 }
-
-
-
-// Checks whether each oxygen has 2 hydrogens
-bool areHydrogensCorrectlyPlaced(std::vector<int> hydrogenCounts)
-{
-	int numWaters = hydrogenCounts.size();
-	for ( int i=0; i<numWaters; i++ ) {
-		if ( hydrogenCounts[i] != 2 ) {
-			return false;
-		}
-	}
-	return true;
-}
-
 
 
 // Vector norm

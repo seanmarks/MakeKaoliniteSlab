@@ -11,7 +11,7 @@
 # Linking occurs when the object files (.o) are put together into an executable (.exe)
 
 # Output program
-PROJECT=GenKaoliniteSlab.exe
+PROJECT=MakeKaoliniteSlab
 
 # Compiler
 CC= g++
@@ -36,3 +36,11 @@ $(PROJECT) :
 
 clean:
 	rm -rf bin/*
+
+.PHONY: test
+test:
+	@{ \
+	cd test/grid_2_2_2 ;\
+	./run.sh ;\
+	./compare.sh ;\
+	}
