@@ -1,0 +1,9 @@
+; ClayFF atom types
+[ atomtypes ]
+; type        mass       charge      ptype     sigma[nm]         epsilon[kJ/mol]
+  AlO_ClayFF   26.982   +1.575   A   4.27124e-01   5.56388e-06
+  HH_ClayFF   1.008   +0.425   A   0.00000e+00   0.00000e+00
+  OB_ClayFF   16.000   -1.050   A   3.16554e-01   6.50194e-01
+  OH_ClayFF   16.000   -0.950   A   3.16554e-01   6.50194e-01
+  SiT_ClayFF   28.085   +2.100   A   3.30203e-01   7.70065e-06
+

@@ -59,17 +59,22 @@ const AtomType& ClayFF::getAtomType(const std::string& type) const
 	}
 }
 
-void ClayFF::printAtomTypes(const std::string& atp_file) const
+void ClayFF::printAtomTypes(const std::string& atom_types_file) const
 {
-	std::ofstream ofs(atp_file);
+	std::ofstream ofs(atom_types_file);
 	ofs << "; ClayFF atom types\n"
 	    << "[ atomtypes ]\n"
-	    << "; type    mass       charge      ptype     sigma[nm]         epsilon[kJ/mol]\n";
+	    << "; type        mass       charge      ptype     sigma[nm]         epsilon[kJ/mol]\n";
 
 	for ( auto it = atom_type_map_.begin(); it != atom_type_map_.end(); ++it ) {
 		const AtomType& atom_type = it->second;
-		ofs << " " << atom_type.type << "  " << atom_type.mass << "  " << atom_type.charge << "  "
-		    << atom_type.ptype << "  " << atom_type.sigma << "  " << atom_type.epsilon << "\n";
+		ofs << "  " << atom_type.type 
+		    << "   " << std::fixed << std::setprecision(3) << atom_type.mass 
+		    << "   " << std::showpos << std::fixed << std::setprecision(3) << atom_type.charge << std::noshowpos
+		    << "   " << atom_type.ptype 
+		    << "   " << std::scientific << std::setprecision(5) << atom_type.sigma 
+		    << "   " << std::scientific << std::setprecision(5) << atom_type.epsilon 
+		    << "\n";
 	}
 	ofs << "\n";
 

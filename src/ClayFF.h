@@ -21,6 +21,7 @@
 #include <array>
 #include <cmath>
 #include <exception>
+#include <iomanip>
 #include <fstream>
 #include <map>
 #include <vector>
@@ -52,7 +53,7 @@ class ClayFF
 	const std::map<std::string, AtomType>& get_atom_type_map() const { return atom_type_map_; }
 
 	// Print atomtype parameters to file in GROMACS format
-	void printAtomTypes(const std::string& atp_file) const;
+	void printAtomTypes(const std::string& atom_types_file) const;
 
  private:
 	std::map<std::string, AtomType> atom_type_map_;

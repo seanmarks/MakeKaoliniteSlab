@@ -286,7 +286,11 @@ int main(int argc, char* argv[])
 	                            slab_residue_names, slab_atom_names, reflected_slab, slab_lengths );
 
 
-	// TODO write atomtypes to another file (.atp or .ff)
+	//----- Write ClayFF atomtypes -----//
+
+	std::string atom_types_file("clayff_nonbonded.itp");
+	clayff.printAtomTypes( atom_types_file );
+
 
 	//----- Write an .itp file for the slab -----//
 
