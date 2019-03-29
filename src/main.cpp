@@ -69,20 +69,6 @@ int main(int argc, char* argv[])
 
 	//----- Atom type parameters for [ moleculetype ] ----//
 
-	// Names of atoms for GROMACS
-	// - Key (CLAYFF nomenclature):
-	//     AlO  = aluminum, octahedrally coordinated
-	//     SiT  = silicon, tetrahedrally coordinated
-	//     OBTS = bridging oxygen bonded to a tetrahedral substitution
-	//     OBSS = bridging oxygen bonded to two oct. subs OR double-subs.
-	//     OH   = hydroxyl oxygen
-	//     OHS  = hydroxyl oxygen bonded to a substituted site
-	//     HH   = hydroxyl hydrogen
-	// - Note: "substituted" --> non-oxygen
-	// - Suffix "K" for kaolinite
-
-	// TODO convert to maps
-
 	ClayFF clayff;
 
 	// Start with Al and Si
@@ -111,26 +97,6 @@ int main(int argc, char* argv[])
 		unit_cell_atom_charges[i] = atom_type.charge;
 	}
 
-	/*
-	for ( int i=0; i<5; ++i ) {
-		unit_cell_atom_names.push_back( std::string("OBK") );
-		unit_cell_atom_masses.push_back( 16.000 );
-		unit_cell_atom_charges.push_back( -1.05 );
-	}
-
-	for ( int i=0; i<4; ++i ) {
-		unit_cell_atom_names.push_back( std::string("OHK") );
-		unit_cell_atom_masses.push_back( 16.000 );
-		unit_cell_atom_charges.push_back( -0.95 );
-	}
-
-	// HHK: hydroxyl hydrogens
-	for ( int i=0; i<4; ++i ) {
-		unit_cell_atom_names.push_back( std::string("HHK") );
-		unit_cell_atom_masses.push_back( 1.008 );
-		unit_cell_atom_charges.push_back( 0.425 );
-	}
-	*/
 
 	//----- Use symmetry to construct a "full" unit cell -----//
 
@@ -239,6 +205,8 @@ int main(int argc, char* argv[])
 
 	//----- Make a slab of kaolinite  -----//
 
+	std::cout << "Making kaolinite slab\n";
+
 	// Slab dimensions [nm]
 	Real3 slab_lengths;
 	for ( int d=0; d<DIM_; ++d ) {
@@ -321,6 +289,8 @@ int main(int argc, char* argv[])
 	// TODO write atomtypes to another file (.atp or .ff)
 
 	//----- Write an .itp file for the slab -----//
+
+	std::cout << "Writing topology\n";
 
 	std::string itp_file("kaolinite_slab.itp");
 	std::ofstream ofs( itp_file );
@@ -558,29 +528,25 @@ int main(int argc, char* argv[])
 	ofs.close();
 
 
-	//----- Index file for partially-frozen surfaces -----//
+	//----- Index files for partially-frozen surfaces -----//
+
+	std::cout << "Making index files\n";
 
 	// Indices (in the unit cell) of the Al surface's O and H atoms
 	// - Note: O(9)--H(13) and O(26)--H(30) are surface hydroxyl groups
 	std::vector<int> unit_cell_surface_O = { 10, 11, 12, 27, 28, 29 };
 	std::vector<int> unit_cell_surface_H = { 14, 15, 33, 31, 32, 16 };   // corresponding H
 	std::sort( unit_cell_surface_H.begin(), unit_cell_surface_H.end() ); // sort for convenience
+	int num_surface_hydroxyl_groups = unit_cell_surface_O.size();
 
 	// Arrays of frozen atom indices
-	std::vector<int> frozen_atoms_free_H;
-	std::vector<int> frozen_atoms_free_OH;
-
-	frozen_atoms_free_H.reserve(num_atoms_per_slab);
-	frozen_atoms_free_OH.reserve(num_atoms_per_slab);
-
-	// Number of surface hydroxyl groups per unit cell
-	int num_surface_hydroxyl_groups = unit_cell_surface_O.size();
+	std::vector<int> frozen_atoms_free_H;   frozen_atoms_free_H.reserve(num_atoms_per_slab);
+	std::vector<int> frozen_atoms_free_OH;  frozen_atoms_free_OH.reserve(num_atoms_per_slab);
 
 	// Index of topmost layer (along z)
 	int top_layer = unit_cell_grid[2] - 1;
 
-	// "Free H" surface: only hydroxyl H at the Al surface can move
-	bool is_frozen;
+	bool is_frozen_free_H, is_frozen_free_OH;
 	for ( int l=0; l<unit_cell_grid[0]; ++l ) {
 		for ( int m=0; m<unit_cell_grid[1]; ++m ) {
 			for ( int n=0; n<unit_cell_grid[2]; ++n ) {
@@ -589,58 +555,30 @@ int main(int argc, char* argv[])
 				int atom_index_offset = num_atoms_per_unit_cell*cell_index;
 				
 				for ( int i=0; i<num_atoms_per_unit_cell; ++i ) {
-					// Reset the flag
-					is_frozen = true;
+					// Reset flags
+					is_frozen_free_H  = true;
+					is_frozen_free_OH = true;
 
-					// If in top layer, might be a free H
+					// If in top layer, might be a free O or H
 					if ( n == top_layer ) {
-						for ( int d=0; d<num_surface_hydroxyl_groups; ++d ) {
-							if ( i == unit_cell_surface_H[d] ) {
+						for ( int j=0; j<num_surface_hydroxyl_groups; ++j ) {
+							if ( i == unit_cell_surface_H[j] ) {
 								// Atom is a surface H: don't freeze it
-								is_frozen = false;
+								is_frozen_free_H  = false;
+								is_frozen_free_OH = false;
+							}
+							else if ( i == unit_cell_surface_O[j] ) {
+								// Atom is a surface O: don't freeze it in the "free OH" setup
+								is_frozen_free_OH = false;
 							}
 						}
 					}
 
-					if ( is_frozen ) {
-						// Store index
-						int atom_index = atom_index_offset + i;
+					int atom_index = atom_index_offset + i;
+					if ( is_frozen_free_H ) {
 						frozen_atoms_free_H.push_back( atom_index );
 					}
-				}
-			}
-		}
-	}
-
-	// Free OH surface: only hydroxyl groups at exposed Al surface free 
-	for ( int l=0; l<unit_cell_grid[0]; ++l ) {
-		for ( int m=0; m<unit_cell_grid[1]; ++m ) {
-			for ( int n=0; n<unit_cell_grid[2]; ++n ) {
-				// Current unit cell and index of its first atom
-				int cell_index = getLinearCellIndex( Int3{{l, m, n}}, unit_cell_grid);
-				int atom_index_offset = num_atoms_per_unit_cell*cell_index;
-				
-				for ( int i=0; i<num_atoms_per_unit_cell; ++i ) {
-					// Reset the flag
-					is_frozen = true;
-
-					// If in top layer, might be an H
-					if ( n == top_layer ) {
-						for ( int d=0; d<num_surface_hydroxyl_groups; ++d ) {
-							if ( i == unit_cell_surface_H[d] ) {
-								// Atom is a surface H: don't freeze it
-								is_frozen = false;
-							}
-							else if ( i == unit_cell_surface_O[d] ) {
-								// Atom is a surface O: don't freeze it
-								is_frozen = false;
-							}
-						}
-					}
-
-					if ( is_frozen ) {
-						// Store index
-						int atom_index = atom_index_offset + i;
+					if ( is_frozen_free_OH ) {
 						frozen_atoms_free_OH.push_back( atom_index );
 					}
 				}
@@ -648,109 +586,47 @@ int main(int argc, char* argv[])
 		}
 	}
 
+	// Write index file with freeze groups for a single kaolinite slab
+	std::vector<std::string> frozen_atom_group_names = {
+		"KAO_FROZEN_ATOMS_FREE_H", "KAO_FROZEN_ATOMS_FREE_OH"
+	};
 
-	//----- Write a freeze group file for a single kaolinite slab -----//
+	std::vector<std::vector<int>> frozen_atom_groups = {
+		frozen_atoms_free_H, frozen_atoms_free_OH
+	};
 
-	ofs.open("freeze_groups_monolayer.ndx");
+	writeIndexFile("freeze_groups_monolayer.ndx", "Freeze groups for kaolinite monolayer",
+	               frozen_atom_group_names, frozen_atom_groups);
 
-	// Multiple indices per line for compact file
-	int line_counter = 0;
-	int num_atoms_per_line = 5;
+	//----- Write freeze groups for kaolinite bilayer -----//
 
-	// Free H surface
+	std::vector<int> frozen_atoms_free_H_bilayer = frozen_atoms_free_H;
+	frozen_atoms_free_H_bilayer.insert( frozen_atoms_free_H_bilayer.end(), 
+	                                    frozen_atoms_free_H.begin(), frozen_atoms_free_H.end() );
 	int num_frozen_atoms_free_H = frozen_atoms_free_H.size();
-
-	ofs << "[ KAO_FROZEN_ATOMS_FREE_H ]" << "\n";
-
-	for ( int i=0; i<num_frozen_atoms_free_H; ++i ) {
-		ofs << " " << frozen_atoms_free_H[i] + 1;
-		if ( line_counter < num_atoms_per_line ) {
-			++line_counter;
-		}
-		else {
-			// Done line
-			ofs << "\n";
-			line_counter = 0;
-		}
+	for ( unsigned i=num_frozen_atoms_free_H; i<frozen_atoms_free_H_bilayer.size(); ++i ) {
+		frozen_atoms_free_H_bilayer[i] += num_atoms_per_slab;
 	}
-	ofs << "\n";
 
-	// Free OH surface
+	std::vector<int> frozen_atoms_free_OH_bilayer = frozen_atoms_free_OH;
+	frozen_atoms_free_OH_bilayer.insert( frozen_atoms_free_OH_bilayer.end(), 
+	                                    frozen_atoms_free_OH.begin(), frozen_atoms_free_OH.end() );
 	int num_frozen_atoms_free_OH = frozen_atoms_free_OH.size();
-
-	ofs << "[ KAO_FROZEN_ATOMS_FREE_OH ]" << "\n";
-
-	line_counter = 0;
-
-	for ( int i=0; i<num_frozen_atoms_free_OH; ++i ) {
-		ofs << " " << frozen_atoms_free_OH[i] + 1;
-		if ( line_counter < num_atoms_per_line ) {
-			++line_counter;
-		}
-		else {
-			// Done line
-			ofs << "\n";
-			line_counter = 0;
-		}
+	for ( unsigned i=num_frozen_atoms_free_OH; i<frozen_atoms_free_OH_bilayer.size(); ++i ) {
+		frozen_atoms_free_OH_bilayer[i] += num_atoms_per_slab;
 	}
-	ofs << "\n";
 
-	ofs.close();
+	std::vector<std::vector<int>> frozen_atom_groups_bilayer = {{
+		frozen_atoms_free_H_bilayer, frozen_atoms_free_OH_bilayer
+	}};
 
+	writeIndexFile("freeze_groups_bilayer.ndx", "Freeze groups for kaolinite bilayer",
+	               frozen_atom_group_names, frozen_atom_groups_bilayer);
 
-	//----- Write a second freeze group file for a kaolinite bilayer -----//
 	
-	// Assumes layers are stored consecutively
-	std::vector<int> layer_atom_offsets = { 0, num_atoms_per_slab };
-	int num_layers = layer_atom_offsets.size();
-
-	ofs.open("freeze_groups_bilayer.ndx");
-
-	// Free H surface
-	ofs << "[ KAO_FROZEN_ATOMS_FREE_H ]" << "\n";
-
-	for ( int l=0; l<num_layers; ++l ) {
-		for ( int i=0; i<num_frozen_atoms_free_H; ++i ) {
-			ofs << " " << (frozen_atoms_free_H[i] + layer_atom_offsets[l] + 1);
-
-			if ( line_counter < num_atoms_per_line ) {
-				++line_counter;
-			}
-			else {
-				// Done line
-				ofs << "\n";
-				line_counter = 0;
-			}
-		}
-	}
-	ofs << "\n";
-
-	// Free OH surface
-
-	ofs << "[ KAO_FROZEN_ATOMS_FREE_OH ]" << "\n";
-
-	line_counter = 0;
-
-	for ( int l=0; l<num_layers; ++l ) {
-		for ( int i=0; i<num_frozen_atoms_free_OH; ++i ) {
-			ofs << " " << (frozen_atoms_free_OH[i] + layer_atom_offsets[l] + 1);
-
-			if ( line_counter < num_atoms_per_line ) {
-				++line_counter;
-			}
-			else {
-				// Done line
-				ofs << "\n";
-				line_counter = 0;
-			}
-		}
-	}
-	ofs << "\n";
-
-	ofs.close();
-
-
 	//----- Position Restraints -----//
+
+	std::cout << "Making position restraint files\n";
 
 	// Standard position restraints
 	double k_restr = 1.0e3;  // restraint strength (kJ/mol/nm^2)
@@ -764,7 +640,6 @@ int main(int argc, char* argv[])
 
 	// Position restraints for Si atoms in the lowest layer
 	std::vector<int> indices_posre_Si;
-	atom_counter = 0;
 	Int3 cell_indices;
 	for ( cell_indices[X_DIM]=0; cell_indices[X_DIM]<unit_cell_grid[0]; ++cell_indices[X_DIM] ) {
 		for ( cell_indices[Y_DIM]=0; cell_indices[Y_DIM]<unit_cell_grid[1]; ++cell_indices[Y_DIM] ) {
@@ -791,13 +666,12 @@ int main(int argc, char* argv[])
 
 	// Position restraints for Al atoms in highest layer
 	std::vector<int> indices_posre_Al;
-	atom_counter = 0;
 	for ( cell_indices[X_DIM]=0; cell_indices[X_DIM]<unit_cell_grid[0]; ++cell_indices[X_DIM] ) {
 		for ( cell_indices[Y_DIM]=0; cell_indices[Y_DIM]<unit_cell_grid[1]; ++cell_indices[Y_DIM] ) {
 			// Only consider the topmost layer
 			cell_indices[Z_DIM] = unit_cell_grid[Z_DIM] - 1;
 
-			int cell_index = getLinearCellIndex( cell_indices, unit_cell_grid);
+			int cell_index = getLinearCellIndex( cell_indices, unit_cell_grid );
 			int atom_index_offset = num_atoms_per_unit_cell*cell_index;
 			int atom_index;
 			for ( int i=0; i<num_atoms_per_unit_cell; ++i ) {
@@ -844,6 +718,8 @@ int main(int argc, char* argv[])
 	                         restr_comment, param_ss.str() );
 	writeIndexFile( "kao_heavy.ndx", "Kaolinite heavy atoms (normal slab)",
 	                "kao_heavy", slab_heavy_atoms );
+
+	std::cout << "Done\n";
 }
 
 
@@ -910,4 +786,28 @@ void writeIndexFile(
 		}
 	}
 	ofs << "\n";
+}
+
+
+void writeIndexFile(
+	const std::string& ndx_file, const std::string& header, 
+	const std::vector<std::string>& group_names, const std::vector<std::vector<int>>& atom_indices, 
+	const int num_atoms_per_line)
+{
+	std::ofstream ofs(ndx_file);
+	ofs << "; " << header << "\n";
+
+	int num_groups = group_names.size();
+	for ( int g=0; g<num_groups; ++g ) {
+		ofs << "[ " << group_names[g] << " ]\n";
+
+		int num_atoms = atom_indices[g].size();
+		for ( int i=0; i<num_atoms; ++i ) {
+			ofs << " " << atom_indices[g][i] + 1;
+			if ( i > 0 and (i % num_atoms_per_line == 0) ) {
+				ofs << "\n";
+			}
+		}
+		ofs << "\n";
+	}
 }

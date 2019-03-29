@@ -37,3 +37,6 @@ backup*/*
 *.exe
 *.out
 *.app
+
+# Temp files
+.*.swp

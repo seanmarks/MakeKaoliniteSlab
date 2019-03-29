@@ -144,7 +144,7 @@ void GroFileTools::writeGroFile(
 	int num_atoms = positions.size();
 
 	// Title
-	int pos = title.find('\n');
+	unsigned pos = title.find('\n');
 	if ( pos != std::string::npos ) {
 		ofs << title << "\n";
 	}

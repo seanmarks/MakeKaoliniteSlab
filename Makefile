@@ -14,6 +14,8 @@ CXX=g++
 ### Flags ###
 #############
 
+SHELL := /bin/bash
+
 # Compiler flags
 # - Misc: -march=native -Wno-comment -Wno-sign-compare -DPLUMED_MODE
 CXXFLAGS += -g -std=c++11 -DCPLUSPLUS -O3 -Wall

@@ -46,7 +46,6 @@ int getLinearCellIndex(const Int3& grid_indices, const Int3& grid_dimensions) {
 	       grid_indices[Z_DIM];
 }
 
-
 void writePositionRestraints(
 	const std::string& posre_file,
 	const std::string& header,
@@ -60,6 +59,14 @@ void writeIndexFile(
 	const std::string& header,
 	const std::string& group_name,
 	const std::vector<int>& atom_indices,
+	const int num_atoms_per_line = 20
+);
+
+void writeIndexFile(
+	const std::string& ndx_file,
+	const std::string& header,
+	const std::vector<std::string>& group_names,
+	const std::vector<std::vector<int>>& atom_indices,
 	const int num_atoms_per_line = 20
 );
 

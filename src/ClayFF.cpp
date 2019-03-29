@@ -17,7 +17,7 @@ ClayFF::ClayFF()
 	*/
 
 	// TODO Include remaining types
-	//               name          type   mass     charge   D0         R0
+	//               type          name   mass     charge   D0         R0
 	registerAtomType("HH_ClayFF",  "HH",  mass_H,  +0.4250, 0.0000,    0.0000);  // H, hydroxyl
 	registerAtomType("OH_ClayFF",  "OH",  mass_O,  -0.9500, 0.1554,    3.5532);  // O, hydroxyl 
 	registerAtomType("OB_ClayFF",  "OB",  mass_O,  -1.0500, 0.1554,    3.5532);  // O, "bridging"
@@ -28,7 +28,7 @@ ClayFF::ClayFF()
 
 void ClayFF::registerAtomType(
 	const std::string& type, const std::string& name, const double mass, const double charge,
-	const double energy_param, const double size_param)
+	const double energy_param, const double size_param, const std::string& ptype)
 {
 	// Organize data and perform conversions
 	AtomType new_type;
@@ -38,6 +38,7 @@ void ClayFF::registerAtomType(
 	new_type.charge  = charge;
 	new_type.sigma   = (size_param*nm_per_Angstrom_)/pow(2.0, 1.0/6.0);
 	new_type.epsilon = energy_param*kJ_per_kcal_;
+	new_type.ptype   = ptype;
 
 	// Add to map
 	auto insert_pair = atom_type_map_.insert( std::make_pair(new_type.type, new_type) );
@@ -56,4 +57,21 @@ const AtomType& ClayFF::getAtomType(const std::string& type) const
 	else {
 		throw std::runtime_error("Error in ClayFF: Atom type \"" + type + "\" does not exist");
 	}
+}
+
+void ClayFF::printAtomTypes(const std::string& atp_file) const
+{
+	std::ofstream ofs(atp_file);
+	ofs << "; ClayFF atom types\n"
+	    << "[ atomtypes ]\n"
+	    << "; type    mass       charge      ptype     sigma[nm]         epsilon[kJ/mol]\n";
+
+	for ( auto it = atom_type_map_.begin(); it != atom_type_map_.end(); ++it ) {
+		const AtomType& atom_type = it->second;
+		ofs << " " << atom_type.type << "  " << atom_type.mass << "  " << atom_type.charge << "  "
+		    << atom_type.ptype << "  " << atom_type.sigma << "  " << atom_type.epsilon << "\n";
+	}
+	ofs << "\n";
+
+	ofs.close();
 }
