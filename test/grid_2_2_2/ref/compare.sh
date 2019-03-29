@@ -9,5 +9,9 @@ declare -a files=( \
 )
 
 for file in ${files[@]}; do
-	diff -q $file bck/$file
+	diff_out=$( diff $file ref/$file )
+	if [[ ! -z "$diff_out" ]]; then
+		echo "ERROR: File $file does not match!"
+		echo "$diff_out"
+	fi
 done

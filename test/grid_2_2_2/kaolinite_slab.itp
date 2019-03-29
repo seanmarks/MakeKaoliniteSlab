@@ -1,16 +1,15 @@
-; Topology file fragment for KAO molecule
-; 
+; Topology for a kaolinite slab modeled as a single molecule
+;
 ; ifdef Flags
 ;     AL_SURFACE_FLEXIBLE_OH: O-H bonds at the Al surface are flexible.
 ;     AL_SURFACE_FREE_H: free hydroxyl hydrogens at Al surface
 ;     AL_SURFACE_FREE_OH: free hydroxyl groups at Al surface
-; 
+;
 ; NOTE: For fully rigid kaolinite, use a freeze group
 ;
-; Dipole of unit cell: 
-;     mu = { -12.028,   3.924,  12.913} [Debye]
+; Dipole of the unit cell: 
+;     mu = { -12.028, 3.924, 12.913} [Debye]
 ;    |mu| = 18.078 [Debye]
-;
 
 [ moleculetype ]
 ; molname      nrexcl
@@ -18,547 +17,547 @@
 
 [ atoms ]
 ;  nr   type  resnr   residue  name    cgnr    charge      mass
-       1 AlOK   1      KAO   AlOK    1       1.57500   26.982 
-       2 AlOK   1      KAO   AlOK    2       1.57500   26.982 
-       3 SiTK   1      KAO   SiTK    3       2.10000   28.086 
-       4 SiTK   1      KAO   SiTK    4       2.10000   28.086 
-       5 OBK    1      KAO   OBK     5      -1.05000   16.000 
-       6 OBK    1      KAO   OBK     6      -1.05000   16.000 
-       7 OBK    1      KAO   OBK     7      -1.05000   16.000 
-       8 OBK    1      KAO   OBK     8      -1.05000   16.000 
-       9 OBK    1      KAO   OBK     9      -1.05000   16.000 
-      10 OHK    1      KAO   OHK     10     -0.95000   16.000 
-      11 OHK    1      KAO   OHK     11     -0.95000   16.000 
-      12 OHK    1      KAO   OHK     12     -0.95000   16.000 
-      13 OHK    1      KAO   OHK     13     -0.95000   16.000 
-      14 HHK    1      KAO   HHK     14      0.42500    1.008 
-      15 HHK    1      KAO   HHK     15      0.42500    1.008 
-      16 HHK    1      KAO   HHK     16      0.42500    1.008 
-      17 HHK    1      KAO   HHK     17      0.42500    1.008 
-      18 AlOK   1      KAO   AlOK    18      1.57500   26.982 
-      19 AlOK   1      KAO   AlOK    19      1.57500   26.982 
-      20 SiTK   1      KAO   SiTK    20      2.10000   28.086 
-      21 SiTK   1      KAO   SiTK    21      2.10000   28.086 
-      22 OBK    1      KAO   OBK     22     -1.05000   16.000 
-      23 OBK    1      KAO   OBK     23     -1.05000   16.000 
-      24 OBK    1      KAO   OBK     24     -1.05000   16.000 
-      25 OBK    1      KAO   OBK     25     -1.05000   16.000 
-      26 OBK    1      KAO   OBK     26     -1.05000   16.000 
-      27 OHK    1      KAO   OHK     27     -0.95000   16.000 
-      28 OHK    1      KAO   OHK     28     -0.95000   16.000 
-      29 OHK    1      KAO   OHK     29     -0.95000   16.000 
-      30 OHK    1      KAO   OHK     30     -0.95000   16.000 
-      31 HHK    1      KAO   HHK     31      0.42500    1.008 
-      32 HHK    1      KAO   HHK     32      0.42500    1.008 
-      33 HHK    1      KAO   HHK     33      0.42500    1.008 
-      34 HHK    1      KAO   HHK     34      0.42500    1.008 
-      35 AlOK   1      KAO   AlOK    35      1.57500   26.982 
-      36 AlOK   1      KAO   AlOK    36      1.57500   26.982 
-      37 SiTK   1      KAO   SiTK    37      2.10000   28.086 
-      38 SiTK   1      KAO   SiTK    38      2.10000   28.086 
-      39 OBK    1      KAO   OBK     39     -1.05000   16.000 
-      40 OBK    1      KAO   OBK     40     -1.05000   16.000 
-      41 OBK    1      KAO   OBK     41     -1.05000   16.000 
-      42 OBK    1      KAO   OBK     42     -1.05000   16.000 
-      43 OBK    1      KAO   OBK     43     -1.05000   16.000 
-      44 OHK    1      KAO   OHK     44     -0.95000   16.000 
-      45 OHK    1      KAO   OHK     45     -0.95000   16.000 
-      46 OHK    1      KAO   OHK     46     -0.95000   16.000 
-      47 OHK    1      KAO   OHK     47     -0.95000   16.000 
-      48 HHK    1      KAO   HHK     48      0.42500    1.008 
-      49 HHK    1      KAO   HHK     49      0.42500    1.008 
-      50 HHK    1      KAO   HHK     50      0.42500    1.008 
-      51 HHK    1      KAO   HHK     51      0.42500    1.008 
-      52 AlOK   1      KAO   AlOK    52      1.57500   26.982 
-      53 AlOK   1      KAO   AlOK    53      1.57500   26.982 
-      54 SiTK   1      KAO   SiTK    54      2.10000   28.086 
-      55 SiTK   1      KAO   SiTK    55      2.10000   28.086 
-      56 OBK    1      KAO   OBK     56     -1.05000   16.000 
-      57 OBK    1      KAO   OBK     57     -1.05000   16.000 
-      58 OBK    1      KAO   OBK     58     -1.05000   16.000 
-      59 OBK    1      KAO   OBK     59     -1.05000   16.000 
-      60 OBK    1      KAO   OBK     60     -1.05000   16.000 
-      61 OHK    1      KAO   OHK     61     -0.95000   16.000 
-      62 OHK    1      KAO   OHK     62     -0.95000   16.000 
-      63 OHK    1      KAO   OHK     63     -0.95000   16.000 
-      64 OHK    1      KAO   OHK     64     -0.95000   16.000 
-      65 HHK    1      KAO   HHK     65      0.42500    1.008 
-      66 HHK    1      KAO   HHK     66      0.42500    1.008 
-      67 HHK    1      KAO   HHK     67      0.42500    1.008 
-      68 HHK    1      KAO   HHK     68      0.42500    1.008 
-      69 AlOK   1      KAO   AlOK    69      1.57500   26.982 
-      70 AlOK   1      KAO   AlOK    70      1.57500   26.982 
-      71 SiTK   1      KAO   SiTK    71      2.10000   28.086 
-      72 SiTK   1      KAO   SiTK    72      2.10000   28.086 
-      73 OBK    1      KAO   OBK     73     -1.05000   16.000 
-      74 OBK    1      KAO   OBK     74     -1.05000   16.000 
-      75 OBK    1      KAO   OBK     75     -1.05000   16.000 
-      76 OBK    1      KAO   OBK     76     -1.05000   16.000 
-      77 OBK    1      KAO   OBK     77     -1.05000   16.000 
-      78 OHK    1      KAO   OHK     78     -0.95000   16.000 
-      79 OHK    1      KAO   OHK     79     -0.95000   16.000 
-      80 OHK    1      KAO   OHK     80     -0.95000   16.000 
-      81 OHK    1      KAO   OHK     81     -0.95000   16.000 
-      82 HHK    1      KAO   HHK     82      0.42500    1.008 
-      83 HHK    1      KAO   HHK     83      0.42500    1.008 
-      84 HHK    1      KAO   HHK     84      0.42500    1.008 
-      85 HHK    1      KAO   HHK     85      0.42500    1.008 
-      86 AlOK   1      KAO   AlOK    86      1.57500   26.982 
-      87 AlOK   1      KAO   AlOK    87      1.57500   26.982 
-      88 SiTK   1      KAO   SiTK    88      2.10000   28.086 
-      89 SiTK   1      KAO   SiTK    89      2.10000   28.086 
-      90 OBK    1      KAO   OBK     90     -1.05000   16.000 
-      91 OBK    1      KAO   OBK     91     -1.05000   16.000 
-      92 OBK    1      KAO   OBK     92     -1.05000   16.000 
-      93 OBK    1      KAO   OBK     93     -1.05000   16.000 
-      94 OBK    1      KAO   OBK     94     -1.05000   16.000 
-      95 OHK    1      KAO   OHK     95     -0.95000   16.000 
-      96 OHK    1      KAO   OHK     96     -0.95000   16.000 
-      97 OHK    1      KAO   OHK     97     -0.95000   16.000 
-      98 OHK    1      KAO   OHK     98     -0.95000   16.000 
-      99 HHK    1      KAO   HHK     99      0.42500    1.008 
-     100 HHK    1      KAO   HHK     100     0.42500    1.008 
-     101 HHK    1      KAO   HHK     101     0.42500    1.008 
-     102 HHK    1      KAO   HHK     102     0.42500    1.008 
-     103 AlOK   1      KAO   AlOK    103     1.57500   26.982 
-     104 AlOK   1      KAO   AlOK    104     1.57500   26.982 
-     105 SiTK   1      KAO   SiTK    105     2.10000   28.086 
-     106 SiTK   1      KAO   SiTK    106     2.10000   28.086 
-     107 OBK    1      KAO   OBK     107    -1.05000   16.000 
-     108 OBK    1      KAO   OBK     108    -1.05000   16.000 
-     109 OBK    1      KAO   OBK     109    -1.05000   16.000 
-     110 OBK    1      KAO   OBK     110    -1.05000   16.000 
-     111 OBK    1      KAO   OBK     111    -1.05000   16.000 
-     112 OHK    1      KAO   OHK     112    -0.95000   16.000 
-     113 OHK    1      KAO   OHK     113    -0.95000   16.000 
-     114 OHK    1      KAO   OHK     114    -0.95000   16.000 
-     115 OHK    1      KAO   OHK     115    -0.95000   16.000 
-     116 HHK    1      KAO   HHK     116     0.42500    1.008 
-     117 HHK    1      KAO   HHK     117     0.42500    1.008 
-     118 HHK    1      KAO   HHK     118     0.42500    1.008 
-     119 HHK    1      KAO   HHK     119     0.42500    1.008 
-     120 AlOK   1      KAO   AlOK    120     1.57500   26.982 
-     121 AlOK   1      KAO   AlOK    121     1.57500   26.982 
-     122 SiTK   1      KAO   SiTK    122     2.10000   28.086 
-     123 SiTK   1      KAO   SiTK    123     2.10000   28.086 
-     124 OBK    1      KAO   OBK     124    -1.05000   16.000 
-     125 OBK    1      KAO   OBK     125    -1.05000   16.000 
-     126 OBK    1      KAO   OBK     126    -1.05000   16.000 
-     127 OBK    1      KAO   OBK     127    -1.05000   16.000 
-     128 OBK    1      KAO   OBK     128    -1.05000   16.000 
-     129 OHK    1      KAO   OHK     129    -0.95000   16.000 
-     130 OHK    1      KAO   OHK     130    -0.95000   16.000 
-     131 OHK    1      KAO   OHK     131    -0.95000   16.000 
-     132 OHK    1      KAO   OHK     132    -0.95000   16.000 
-     133 HHK    1      KAO   HHK     133     0.42500    1.008 
-     134 HHK    1      KAO   HHK     134     0.42500    1.008 
-     135 HHK    1      KAO   HHK     135     0.42500    1.008 
-     136 HHK    1      KAO   HHK     136     0.42500    1.008 
-     137 AlOK   1      KAO   AlOK    137     1.57500   26.982 
-     138 AlOK   1      KAO   AlOK    138     1.57500   26.982 
-     139 SiTK   1      KAO   SiTK    139     2.10000   28.086 
-     140 SiTK   1      KAO   SiTK    140     2.10000   28.086 
-     141 OBK    1      KAO   OBK     141    -1.05000   16.000 
-     142 OBK    1      KAO   OBK     142    -1.05000   16.000 
-     143 OBK    1      KAO   OBK     143    -1.05000   16.000 
-     144 OBK    1      KAO   OBK     144    -1.05000   16.000 
-     145 OBK    1      KAO   OBK     145    -1.05000   16.000 
-     146 OHK    1      KAO   OHK     146    -0.95000   16.000 
-     147 OHK    1      KAO   OHK     147    -0.95000   16.000 
-     148 OHK    1      KAO   OHK     148    -0.95000   16.000 
-     149 OHK    1      KAO   OHK     149    -0.95000   16.000 
-     150 HHK    1      KAO   HHK     150     0.42500    1.008 
-     151 HHK    1      KAO   HHK     151     0.42500    1.008 
-     152 HHK    1      KAO   HHK     152     0.42500    1.008 
-     153 HHK    1      KAO   HHK     153     0.42500    1.008 
-     154 AlOK   1      KAO   AlOK    154     1.57500   26.982 
-     155 AlOK   1      KAO   AlOK    155     1.57500   26.982 
-     156 SiTK   1      KAO   SiTK    156     2.10000   28.086 
-     157 SiTK   1      KAO   SiTK    157     2.10000   28.086 
-     158 OBK    1      KAO   OBK     158    -1.05000   16.000 
-     159 OBK    1      KAO   OBK     159    -1.05000   16.000 
-     160 OBK    1      KAO   OBK     160    -1.05000   16.000 
-     161 OBK    1      KAO   OBK     161    -1.05000   16.000 
-     162 OBK    1      KAO   OBK     162    -1.05000   16.000 
-     163 OHK    1      KAO   OHK     163    -0.95000   16.000 
-     164 OHK    1      KAO   OHK     164    -0.95000   16.000 
-     165 OHK    1      KAO   OHK     165    -0.95000   16.000 
-     166 OHK    1      KAO   OHK     166    -0.95000   16.000 
-     167 HHK    1      KAO   HHK     167     0.42500    1.008 
-     168 HHK    1      KAO   HHK     168     0.42500    1.008 
-     169 HHK    1      KAO   HHK     169     0.42500    1.008 
-     170 HHK    1      KAO   HHK     170     0.42500    1.008 
-     171 AlOK   1      KAO   AlOK    171     1.57500   26.982 
-     172 AlOK   1      KAO   AlOK    172     1.57500   26.982 
-     173 SiTK   1      KAO   SiTK    173     2.10000   28.086 
-     174 SiTK   1      KAO   SiTK    174     2.10000   28.086 
-     175 OBK    1      KAO   OBK     175    -1.05000   16.000 
-     176 OBK    1      KAO   OBK     176    -1.05000   16.000 
-     177 OBK    1      KAO   OBK     177    -1.05000   16.000 
-     178 OBK    1      KAO   OBK     178    -1.05000   16.000 
-     179 OBK    1      KAO   OBK     179    -1.05000   16.000 
-     180 OHK    1      KAO   OHK     180    -0.95000   16.000 
-     181 OHK    1      KAO   OHK     181    -0.95000   16.000 
-     182 OHK    1      KAO   OHK     182    -0.95000   16.000 
-     183 OHK    1      KAO   OHK     183    -0.95000   16.000 
-     184 HHK    1      KAO   HHK     184     0.42500    1.008 
-     185 HHK    1      KAO   HHK     185     0.42500    1.008 
-     186 HHK    1      KAO   HHK     186     0.42500    1.008 
-     187 HHK    1      KAO   HHK     187     0.42500    1.008 
-     188 AlOK   1      KAO   AlOK    188     1.57500   26.982 
-     189 AlOK   1      KAO   AlOK    189     1.57500   26.982 
-     190 SiTK   1      KAO   SiTK    190     2.10000   28.086 
-     191 SiTK   1      KAO   SiTK    191     2.10000   28.086 
-     192 OBK    1      KAO   OBK     192    -1.05000   16.000 
-     193 OBK    1      KAO   OBK     193    -1.05000   16.000 
-     194 OBK    1      KAO   OBK     194    -1.05000   16.000 
-     195 OBK    1      KAO   OBK     195    -1.05000   16.000 
-     196 OBK    1      KAO   OBK     196    -1.05000   16.000 
-     197 OHK    1      KAO   OHK     197    -0.95000   16.000 
-     198 OHK    1      KAO   OHK     198    -0.95000   16.000 
-     199 OHK    1      KAO   OHK     199    -0.95000   16.000 
-     200 OHK    1      KAO   OHK     200    -0.95000   16.000 
-     201 HHK    1      KAO   HHK     201     0.42500    1.008 
-     202 HHK    1      KAO   HHK     202     0.42500    1.008 
-     203 HHK    1      KAO   HHK     203     0.42500    1.008 
-     204 HHK    1      KAO   HHK     204     0.42500    1.008 
-     205 AlOK   1      KAO   AlOK    205     1.57500   26.982 
-     206 AlOK   1      KAO   AlOK    206     1.57500   26.982 
-     207 SiTK   1      KAO   SiTK    207     2.10000   28.086 
-     208 SiTK   1      KAO   SiTK    208     2.10000   28.086 
-     209 OBK    1      KAO   OBK     209    -1.05000   16.000 
-     210 OBK    1      KAO   OBK     210    -1.05000   16.000 
-     211 OBK    1      KAO   OBK     211    -1.05000   16.000 
-     212 OBK    1      KAO   OBK     212    -1.05000   16.000 
-     213 OBK    1      KAO   OBK     213    -1.05000   16.000 
-     214 OHK    1      KAO   OHK     214    -0.95000   16.000 
-     215 OHK    1      KAO   OHK     215    -0.95000   16.000 
-     216 OHK    1      KAO   OHK     216    -0.95000   16.000 
-     217 OHK    1      KAO   OHK     217    -0.95000   16.000 
-     218 HHK    1      KAO   HHK     218     0.42500    1.008 
-     219 HHK    1      KAO   HHK     219     0.42500    1.008 
-     220 HHK    1      KAO   HHK     220     0.42500    1.008 
-     221 HHK    1      KAO   HHK     221     0.42500    1.008 
-     222 AlOK   1      KAO   AlOK    222     1.57500   26.982 
-     223 AlOK   1      KAO   AlOK    223     1.57500   26.982 
-     224 SiTK   1      KAO   SiTK    224     2.10000   28.086 
-     225 SiTK   1      KAO   SiTK    225     2.10000   28.086 
-     226 OBK    1      KAO   OBK     226    -1.05000   16.000 
-     227 OBK    1      KAO   OBK     227    -1.05000   16.000 
-     228 OBK    1      KAO   OBK     228    -1.05000   16.000 
-     229 OBK    1      KAO   OBK     229    -1.05000   16.000 
-     230 OBK    1      KAO   OBK     230    -1.05000   16.000 
-     231 OHK    1      KAO   OHK     231    -0.95000   16.000 
-     232 OHK    1      KAO   OHK     232    -0.95000   16.000 
-     233 OHK    1      KAO   OHK     233    -0.95000   16.000 
-     234 OHK    1      KAO   OHK     234    -0.95000   16.000 
-     235 HHK    1      KAO   HHK     235     0.42500    1.008 
-     236 HHK    1      KAO   HHK     236     0.42500    1.008 
-     237 HHK    1      KAO   HHK     237     0.42500    1.008 
-     238 HHK    1      KAO   HHK     238     0.42500    1.008 
-     239 AlOK   1      KAO   AlOK    239     1.57500   26.982 
-     240 AlOK   1      KAO   AlOK    240     1.57500   26.982 
-     241 SiTK   1      KAO   SiTK    241     2.10000   28.086 
-     242 SiTK   1      KAO   SiTK    242     2.10000   28.086 
-     243 OBK    1      KAO   OBK     243    -1.05000   16.000 
-     244 OBK    1      KAO   OBK     244    -1.05000   16.000 
-     245 OBK    1      KAO   OBK     245    -1.05000   16.000 
-     246 OBK    1      KAO   OBK     246    -1.05000   16.000 
-     247 OBK    1      KAO   OBK     247    -1.05000   16.000 
-     248 OHK    1      KAO   OHK     248    -0.95000   16.000 
-     249 OHK    1      KAO   OHK     249    -0.95000   16.000 
-     250 OHK    1      KAO   OHK     250    -0.95000   16.000 
-     251 OHK    1      KAO   OHK     251    -0.95000   16.000 
-     252 HHK    1      KAO   HHK     252     0.42500    1.008 
-     253 HHK    1      KAO   HHK     253     0.42500    1.008 
-     254 HHK    1      KAO   HHK     254     0.42500    1.008 
-     255 HHK    1      KAO   HHK     255     0.42500    1.008 
-     256 AlOK   1      KAO   AlOK    256     1.57500   26.982 
-     257 AlOK   1      KAO   AlOK    257     1.57500   26.982 
-     258 SiTK   1      KAO   SiTK    258     2.10000   28.086 
-     259 SiTK   1      KAO   SiTK    259     2.10000   28.086 
-     260 OBK    1      KAO   OBK     260    -1.05000   16.000 
-     261 OBK    1      KAO   OBK     261    -1.05000   16.000 
-     262 OBK    1      KAO   OBK     262    -1.05000   16.000 
-     263 OBK    1      KAO   OBK     263    -1.05000   16.000 
-     264 OBK    1      KAO   OBK     264    -1.05000   16.000 
-     265 OHK    1      KAO   OHK     265    -0.95000   16.000 
-     266 OHK    1      KAO   OHK     266    -0.95000   16.000 
-     267 OHK    1      KAO   OHK     267    -0.95000   16.000 
-     268 OHK    1      KAO   OHK     268    -0.95000   16.000 
-     269 HHK    1      KAO   HHK     269     0.42500    1.008 
-     270 HHK    1      KAO   HHK     270     0.42500    1.008 
-     271 HHK    1      KAO   HHK     271     0.42500    1.008 
-     272 HHK    1      KAO   HHK     272     0.42500    1.008 
+    1   AlO_ClayFF   1   KAO   AlO   1   1.57500   26.982 
+    2   AlO_ClayFF   1   KAO   AlO   2   1.57500   26.982 
+    3   SiT_ClayFF   1   KAO   SiT   3   2.10000   28.085 
+    4   SiT_ClayFF   1   KAO   SiT   4   2.10000   28.085 
+    5   OB_ClayFF   1   KAO   OB   5   -1.05000   16.000 
+    6   OB_ClayFF   1   KAO   OB   6   -1.05000   16.000 
+    7   OB_ClayFF   1   KAO   OB   7   -1.05000   16.000 
+    8   OB_ClayFF   1   KAO   OB   8   -1.05000   16.000 
+    9   OB_ClayFF   1   KAO   OB   9   -1.05000   16.000 
+    10   OH_ClayFF   1   KAO   OH   10   -0.95000   16.000 
+    11   OH_ClayFF   1   KAO   OH   11   -0.95000   16.000 
+    12   OH_ClayFF   1   KAO   OH   12   -0.95000   16.000 
+    13   OH_ClayFF   1   KAO   OH   13   -0.95000   16.000 
+    14   HH_ClayFF   1   KAO   HH   14   0.42500   1.008 
+    15   HH_ClayFF   1   KAO   HH   15   0.42500   1.008 
+    16   HH_ClayFF   1   KAO   HH   16   0.42500   1.008 
+    17   HH_ClayFF   1   KAO   HH   17   0.42500   1.008 
+    18   AlO_ClayFF   1   KAO   AlO   18   1.57500   26.982 
+    19   AlO_ClayFF   1   KAO   AlO   19   1.57500   26.982 
+    20   SiT_ClayFF   1   KAO   SiT   20   2.10000   28.085 
+    21   SiT_ClayFF   1   KAO   SiT   21   2.10000   28.085 
+    22   OB_ClayFF   1   KAO   OB   22   -1.05000   16.000 
+    23   OB_ClayFF   1   KAO   OB   23   -1.05000   16.000 
+    24   OB_ClayFF   1   KAO   OB   24   -1.05000   16.000 
+    25   OB_ClayFF   1   KAO   OB   25   -1.05000   16.000 
+    26   OB_ClayFF   1   KAO   OB   26   -1.05000   16.000 
+    27   OH_ClayFF   1   KAO   OH   27   -0.95000   16.000 
+    28   OH_ClayFF   1   KAO   OH   28   -0.95000   16.000 
+    29   OH_ClayFF   1   KAO   OH   29   -0.95000   16.000 
+    30   OH_ClayFF   1   KAO   OH   30   -0.95000   16.000 
+    31   HH_ClayFF   1   KAO   HH   31   0.42500   1.008 
+    32   HH_ClayFF   1   KAO   HH   32   0.42500   1.008 
+    33   HH_ClayFF   1   KAO   HH   33   0.42500   1.008 
+    34   HH_ClayFF   1   KAO   HH   34   0.42500   1.008 
+    35   AlO_ClayFF   1   KAO   AlO   35   1.57500   26.982 
+    36   AlO_ClayFF   1   KAO   AlO   36   1.57500   26.982 
+    37   SiT_ClayFF   1   KAO   SiT   37   2.10000   28.085 
+    38   SiT_ClayFF   1   KAO   SiT   38   2.10000   28.085 
+    39   OB_ClayFF   1   KAO   OB   39   -1.05000   16.000 
+    40   OB_ClayFF   1   KAO   OB   40   -1.05000   16.000 
+    41   OB_ClayFF   1   KAO   OB   41   -1.05000   16.000 
+    42   OB_ClayFF   1   KAO   OB   42   -1.05000   16.000 
+    43   OB_ClayFF   1   KAO   OB   43   -1.05000   16.000 
+    44   OH_ClayFF   1   KAO   OH   44   -0.95000   16.000 
+    45   OH_ClayFF   1   KAO   OH   45   -0.95000   16.000 
+    46   OH_ClayFF   1   KAO   OH   46   -0.95000   16.000 
+    47   OH_ClayFF   1   KAO   OH   47   -0.95000   16.000 
+    48   HH_ClayFF   1   KAO   HH   48   0.42500   1.008 
+    49   HH_ClayFF   1   KAO   HH   49   0.42500   1.008 
+    50   HH_ClayFF   1   KAO   HH   50   0.42500   1.008 
+    51   HH_ClayFF   1   KAO   HH   51   0.42500   1.008 
+    52   AlO_ClayFF   1   KAO   AlO   52   1.57500   26.982 
+    53   AlO_ClayFF   1   KAO   AlO   53   1.57500   26.982 
+    54   SiT_ClayFF   1   KAO   SiT   54   2.10000   28.085 
+    55   SiT_ClayFF   1   KAO   SiT   55   2.10000   28.085 
+    56   OB_ClayFF   1   KAO   OB   56   -1.05000   16.000 
+    57   OB_ClayFF   1   KAO   OB   57   -1.05000   16.000 
+    58   OB_ClayFF   1   KAO   OB   58   -1.05000   16.000 
+    59   OB_ClayFF   1   KAO   OB   59   -1.05000   16.000 
+    60   OB_ClayFF   1   KAO   OB   60   -1.05000   16.000 
+    61   OH_ClayFF   1   KAO   OH   61   -0.95000   16.000 
+    62   OH_ClayFF   1   KAO   OH   62   -0.95000   16.000 
+    63   OH_ClayFF   1   KAO   OH   63   -0.95000   16.000 
+    64   OH_ClayFF   1   KAO   OH   64   -0.95000   16.000 
+    65   HH_ClayFF   1   KAO   HH   65   0.42500   1.008 
+    66   HH_ClayFF   1   KAO   HH   66   0.42500   1.008 
+    67   HH_ClayFF   1   KAO   HH   67   0.42500   1.008 
+    68   HH_ClayFF   1   KAO   HH   68   0.42500   1.008 
+    69   AlO_ClayFF   1   KAO   AlO   69   1.57500   26.982 
+    70   AlO_ClayFF   1   KAO   AlO   70   1.57500   26.982 
+    71   SiT_ClayFF   1   KAO   SiT   71   2.10000   28.085 
+    72   SiT_ClayFF   1   KAO   SiT   72   2.10000   28.085 
+    73   OB_ClayFF   1   KAO   OB   73   -1.05000   16.000 
+    74   OB_ClayFF   1   KAO   OB   74   -1.05000   16.000 
+    75   OB_ClayFF   1   KAO   OB   75   -1.05000   16.000 
+    76   OB_ClayFF   1   KAO   OB   76   -1.05000   16.000 
+    77   OB_ClayFF   1   KAO   OB   77   -1.05000   16.000 
+    78   OH_ClayFF   1   KAO   OH   78   -0.95000   16.000 
+    79   OH_ClayFF   1   KAO   OH   79   -0.95000   16.000 
+    80   OH_ClayFF   1   KAO   OH   80   -0.95000   16.000 
+    81   OH_ClayFF   1   KAO   OH   81   -0.95000   16.000 
+    82   HH_ClayFF   1   KAO   HH   82   0.42500   1.008 
+    83   HH_ClayFF   1   KAO   HH   83   0.42500   1.008 
+    84   HH_ClayFF   1   KAO   HH   84   0.42500   1.008 
+    85   HH_ClayFF   1   KAO   HH   85   0.42500   1.008 
+    86   AlO_ClayFF   1   KAO   AlO   86   1.57500   26.982 
+    87   AlO_ClayFF   1   KAO   AlO   87   1.57500   26.982 
+    88   SiT_ClayFF   1   KAO   SiT   88   2.10000   28.085 
+    89   SiT_ClayFF   1   KAO   SiT   89   2.10000   28.085 
+    90   OB_ClayFF   1   KAO   OB   90   -1.05000   16.000 
+    91   OB_ClayFF   1   KAO   OB   91   -1.05000   16.000 
+    92   OB_ClayFF   1   KAO   OB   92   -1.05000   16.000 
+    93   OB_ClayFF   1   KAO   OB   93   -1.05000   16.000 
+    94   OB_ClayFF   1   KAO   OB   94   -1.05000   16.000 
+    95   OH_ClayFF   1   KAO   OH   95   -0.95000   16.000 
+    96   OH_ClayFF   1   KAO   OH   96   -0.95000   16.000 
+    97   OH_ClayFF   1   KAO   OH   97   -0.95000   16.000 
+    98   OH_ClayFF   1   KAO   OH   98   -0.95000   16.000 
+    99   HH_ClayFF   1   KAO   HH   99   0.42500   1.008 
+    100   HH_ClayFF   1   KAO   HH   100   0.42500   1.008 
+    101   HH_ClayFF   1   KAO   HH   101   0.42500   1.008 
+    102   HH_ClayFF   1   KAO   HH   102   0.42500   1.008 
+    103   AlO_ClayFF   1   KAO   AlO   103   1.57500   26.982 
+    104   AlO_ClayFF   1   KAO   AlO   104   1.57500   26.982 
+    105   SiT_ClayFF   1   KAO   SiT   105   2.10000   28.085 
+    106   SiT_ClayFF   1   KAO   SiT   106   2.10000   28.085 
+    107   OB_ClayFF   1   KAO   OB   107   -1.05000   16.000 
+    108   OB_ClayFF   1   KAO   OB   108   -1.05000   16.000 
+    109   OB_ClayFF   1   KAO   OB   109   -1.05000   16.000 
+    110   OB_ClayFF   1   KAO   OB   110   -1.05000   16.000 
+    111   OB_ClayFF   1   KAO   OB   111   -1.05000   16.000 
+    112   OH_ClayFF   1   KAO   OH   112   -0.95000   16.000 
+    113   OH_ClayFF   1   KAO   OH   113   -0.95000   16.000 
+    114   OH_ClayFF   1   KAO   OH   114   -0.95000   16.000 
+    115   OH_ClayFF   1   KAO   OH   115   -0.95000   16.000 
+    116   HH_ClayFF   1   KAO   HH   116   0.42500   1.008 
+    117   HH_ClayFF   1   KAO   HH   117   0.42500   1.008 
+    118   HH_ClayFF   1   KAO   HH   118   0.42500   1.008 
+    119   HH_ClayFF   1   KAO   HH   119   0.42500   1.008 
+    120   AlO_ClayFF   1   KAO   AlO   120   1.57500   26.982 
+    121   AlO_ClayFF   1   KAO   AlO   121   1.57500   26.982 
+    122   SiT_ClayFF   1   KAO   SiT   122   2.10000   28.085 
+    123   SiT_ClayFF   1   KAO   SiT   123   2.10000   28.085 
+    124   OB_ClayFF   1   KAO   OB   124   -1.05000   16.000 
+    125   OB_ClayFF   1   KAO   OB   125   -1.05000   16.000 
+    126   OB_ClayFF   1   KAO   OB   126   -1.05000   16.000 
+    127   OB_ClayFF   1   KAO   OB   127   -1.05000   16.000 
+    128   OB_ClayFF   1   KAO   OB   128   -1.05000   16.000 
+    129   OH_ClayFF   1   KAO   OH   129   -0.95000   16.000 
+    130   OH_ClayFF   1   KAO   OH   130   -0.95000   16.000 
+    131   OH_ClayFF   1   KAO   OH   131   -0.95000   16.000 
+    132   OH_ClayFF   1   KAO   OH   132   -0.95000   16.000 
+    133   HH_ClayFF   1   KAO   HH   133   0.42500   1.008 
+    134   HH_ClayFF   1   KAO   HH   134   0.42500   1.008 
+    135   HH_ClayFF   1   KAO   HH   135   0.42500   1.008 
+    136   HH_ClayFF   1   KAO   HH   136   0.42500   1.008 
+    137   AlO_ClayFF   1   KAO   AlO   137   1.57500   26.982 
+    138   AlO_ClayFF   1   KAO   AlO   138   1.57500   26.982 
+    139   SiT_ClayFF   1   KAO   SiT   139   2.10000   28.085 
+    140   SiT_ClayFF   1   KAO   SiT   140   2.10000   28.085 
+    141   OB_ClayFF   1   KAO   OB   141   -1.05000   16.000 
+    142   OB_ClayFF   1   KAO   OB   142   -1.05000   16.000 
+    143   OB_ClayFF   1   KAO   OB   143   -1.05000   16.000 
+    144   OB_ClayFF   1   KAO   OB   144   -1.05000   16.000 
+    145   OB_ClayFF   1   KAO   OB   145   -1.05000   16.000 
+    146   OH_ClayFF   1   KAO   OH   146   -0.95000   16.000 
+    147   OH_ClayFF   1   KAO   OH   147   -0.95000   16.000 
+    148   OH_ClayFF   1   KAO   OH   148   -0.95000   16.000 
+    149   OH_ClayFF   1   KAO   OH   149   -0.95000   16.000 
+    150   HH_ClayFF   1   KAO   HH   150   0.42500   1.008 
+    151   HH_ClayFF   1   KAO   HH   151   0.42500   1.008 
+    152   HH_ClayFF   1   KAO   HH   152   0.42500   1.008 
+    153   HH_ClayFF   1   KAO   HH   153   0.42500   1.008 
+    154   AlO_ClayFF   1   KAO   AlO   154   1.57500   26.982 
+    155   AlO_ClayFF   1   KAO   AlO   155   1.57500   26.982 
+    156   SiT_ClayFF   1   KAO   SiT   156   2.10000   28.085 
+    157   SiT_ClayFF   1   KAO   SiT   157   2.10000   28.085 
+    158   OB_ClayFF   1   KAO   OB   158   -1.05000   16.000 
+    159   OB_ClayFF   1   KAO   OB   159   -1.05000   16.000 
+    160   OB_ClayFF   1   KAO   OB   160   -1.05000   16.000 
+    161   OB_ClayFF   1   KAO   OB   161   -1.05000   16.000 
+    162   OB_ClayFF   1   KAO   OB   162   -1.05000   16.000 
+    163   OH_ClayFF   1   KAO   OH   163   -0.95000   16.000 
+    164   OH_ClayFF   1   KAO   OH   164   -0.95000   16.000 
+    165   OH_ClayFF   1   KAO   OH   165   -0.95000   16.000 
+    166   OH_ClayFF   1   KAO   OH   166   -0.95000   16.000 
+    167   HH_ClayFF   1   KAO   HH   167   0.42500   1.008 
+    168   HH_ClayFF   1   KAO   HH   168   0.42500   1.008 
+    169   HH_ClayFF   1   KAO   HH   169   0.42500   1.008 
+    170   HH_ClayFF   1   KAO   HH   170   0.42500   1.008 
+    171   AlO_ClayFF   1   KAO   AlO   171   1.57500   26.982 
+    172   AlO_ClayFF   1   KAO   AlO   172   1.57500   26.982 
+    173   SiT_ClayFF   1   KAO   SiT   173   2.10000   28.085 
+    174   SiT_ClayFF   1   KAO   SiT   174   2.10000   28.085 
+    175   OB_ClayFF   1   KAO   OB   175   -1.05000   16.000 
+    176   OB_ClayFF   1   KAO   OB   176   -1.05000   16.000 
+    177   OB_ClayFF   1   KAO   OB   177   -1.05000   16.000 
+    178   OB_ClayFF   1   KAO   OB   178   -1.05000   16.000 
+    179   OB_ClayFF   1   KAO   OB   179   -1.05000   16.000 
+    180   OH_ClayFF   1   KAO   OH   180   -0.95000   16.000 
+    181   OH_ClayFF   1   KAO   OH   181   -0.95000   16.000 
+    182   OH_ClayFF   1   KAO   OH   182   -0.95000   16.000 
+    183   OH_ClayFF   1   KAO   OH   183   -0.95000   16.000 
+    184   HH_ClayFF   1   KAO   HH   184   0.42500   1.008 
+    185   HH_ClayFF   1   KAO   HH   185   0.42500   1.008 
+    186   HH_ClayFF   1   KAO   HH   186   0.42500   1.008 
+    187   HH_ClayFF   1   KAO   HH   187   0.42500   1.008 
+    188   AlO_ClayFF   1   KAO   AlO   188   1.57500   26.982 
+    189   AlO_ClayFF   1   KAO   AlO   189   1.57500   26.982 
+    190   SiT_ClayFF   1   KAO   SiT   190   2.10000   28.085 
+    191   SiT_ClayFF   1   KAO   SiT   191   2.10000   28.085 
+    192   OB_ClayFF   1   KAO   OB   192   -1.05000   16.000 
+    193   OB_ClayFF   1   KAO   OB   193   -1.05000   16.000 
+    194   OB_ClayFF   1   KAO   OB   194   -1.05000   16.000 
+    195   OB_ClayFF   1   KAO   OB   195   -1.05000   16.000 
+    196   OB_ClayFF   1   KAO   OB   196   -1.05000   16.000 
+    197   OH_ClayFF   1   KAO   OH   197   -0.95000   16.000 
+    198   OH_ClayFF   1   KAO   OH   198   -0.95000   16.000 
+    199   OH_ClayFF   1   KAO   OH   199   -0.95000   16.000 
+    200   OH_ClayFF   1   KAO   OH   200   -0.95000   16.000 
+    201   HH_ClayFF   1   KAO   HH   201   0.42500   1.008 
+    202   HH_ClayFF   1   KAO   HH   202   0.42500   1.008 
+    203   HH_ClayFF   1   KAO   HH   203   0.42500   1.008 
+    204   HH_ClayFF   1   KAO   HH   204   0.42500   1.008 
+    205   AlO_ClayFF   1   KAO   AlO   205   1.57500   26.982 
+    206   AlO_ClayFF   1   KAO   AlO   206   1.57500   26.982 
+    207   SiT_ClayFF   1   KAO   SiT   207   2.10000   28.085 
+    208   SiT_ClayFF   1   KAO   SiT   208   2.10000   28.085 
+    209   OB_ClayFF   1   KAO   OB   209   -1.05000   16.000 
+    210   OB_ClayFF   1   KAO   OB   210   -1.05000   16.000 
+    211   OB_ClayFF   1   KAO   OB   211   -1.05000   16.000 
+    212   OB_ClayFF   1   KAO   OB   212   -1.05000   16.000 
+    213   OB_ClayFF   1   KAO   OB   213   -1.05000   16.000 
+    214   OH_ClayFF   1   KAO   OH   214   -0.95000   16.000 
+    215   OH_ClayFF   1   KAO   OH   215   -0.95000   16.000 
+    216   OH_ClayFF   1   KAO   OH   216   -0.95000   16.000 
+    217   OH_ClayFF   1   KAO   OH   217   -0.95000   16.000 
+    218   HH_ClayFF   1   KAO   HH   218   0.42500   1.008 
+    219   HH_ClayFF   1   KAO   HH   219   0.42500   1.008 
+    220   HH_ClayFF   1   KAO   HH   220   0.42500   1.008 
+    221   HH_ClayFF   1   KAO   HH   221   0.42500   1.008 
+    222   AlO_ClayFF   1   KAO   AlO   222   1.57500   26.982 
+    223   AlO_ClayFF   1   KAO   AlO   223   1.57500   26.982 
+    224   SiT_ClayFF   1   KAO   SiT   224   2.10000   28.085 
+    225   SiT_ClayFF   1   KAO   SiT   225   2.10000   28.085 
+    226   OB_ClayFF   1   KAO   OB   226   -1.05000   16.000 
+    227   OB_ClayFF   1   KAO   OB   227   -1.05000   16.000 
+    228   OB_ClayFF   1   KAO   OB   228   -1.05000   16.000 
+    229   OB_ClayFF   1   KAO   OB   229   -1.05000   16.000 
+    230   OB_ClayFF   1   KAO   OB   230   -1.05000   16.000 
+    231   OH_ClayFF   1   KAO   OH   231   -0.95000   16.000 
+    232   OH_ClayFF   1   KAO   OH   232   -0.95000   16.000 
+    233   OH_ClayFF   1   KAO   OH   233   -0.95000   16.000 
+    234   OH_ClayFF   1   KAO   OH   234   -0.95000   16.000 
+    235   HH_ClayFF   1   KAO   HH   235   0.42500   1.008 
+    236   HH_ClayFF   1   KAO   HH   236   0.42500   1.008 
+    237   HH_ClayFF   1   KAO   HH   237   0.42500   1.008 
+    238   HH_ClayFF   1   KAO   HH   238   0.42500   1.008 
+    239   AlO_ClayFF   1   KAO   AlO   239   1.57500   26.982 
+    240   AlO_ClayFF   1   KAO   AlO   240   1.57500   26.982 
+    241   SiT_ClayFF   1   KAO   SiT   241   2.10000   28.085 
+    242   SiT_ClayFF   1   KAO   SiT   242   2.10000   28.085 
+    243   OB_ClayFF   1   KAO   OB   243   -1.05000   16.000 
+    244   OB_ClayFF   1   KAO   OB   244   -1.05000   16.000 
+    245   OB_ClayFF   1   KAO   OB   245   -1.05000   16.000 
+    246   OB_ClayFF   1   KAO   OB   246   -1.05000   16.000 
+    247   OB_ClayFF   1   KAO   OB   247   -1.05000   16.000 
+    248   OH_ClayFF   1   KAO   OH   248   -0.95000   16.000 
+    249   OH_ClayFF   1   KAO   OH   249   -0.95000   16.000 
+    250   OH_ClayFF   1   KAO   OH   250   -0.95000   16.000 
+    251   OH_ClayFF   1   KAO   OH   251   -0.95000   16.000 
+    252   HH_ClayFF   1   KAO   HH   252   0.42500   1.008 
+    253   HH_ClayFF   1   KAO   HH   253   0.42500   1.008 
+    254   HH_ClayFF   1   KAO   HH   254   0.42500   1.008 
+    255   HH_ClayFF   1   KAO   HH   255   0.42500   1.008 
+    256   AlO_ClayFF   1   KAO   AlO   256   1.57500   26.982 
+    257   AlO_ClayFF   1   KAO   AlO   257   1.57500   26.982 
+    258   SiT_ClayFF   1   KAO   SiT   258   2.10000   28.085 
+    259   SiT_ClayFF   1   KAO   SiT   259   2.10000   28.085 
+    260   OB_ClayFF   1   KAO   OB   260   -1.05000   16.000 
+    261   OB_ClayFF   1   KAO   OB   261   -1.05000   16.000 
+    262   OB_ClayFF   1   KAO   OB   262   -1.05000   16.000 
+    263   OB_ClayFF   1   KAO   OB   263   -1.05000   16.000 
+    264   OB_ClayFF   1   KAO   OB   264   -1.05000   16.000 
+    265   OH_ClayFF   1   KAO   OH   265   -0.95000   16.000 
+    266   OH_ClayFF   1   KAO   OH   266   -0.95000   16.000 
+    267   OH_ClayFF   1   KAO   OH   267   -0.95000   16.000 
+    268   OH_ClayFF   1   KAO   OH   268   -0.95000   16.000 
+    269   HH_ClayFF   1   KAO   HH   269   0.42500   1.008 
+    270   HH_ClayFF   1   KAO   HH   270   0.42500   1.008 
+    271   HH_ClayFF   1   KAO   HH   271   0.42500   1.008 
+    272   HH_ClayFF   1   KAO   HH   272   0.42500   1.008 
 
 #ifdef AL_SURFACE_FLEXIBLE_OH
 [ bonds ]
 ; ai    aj    funct     b0=r0(nm)    k(kJ/mol/nm^2)
-    10    14   1    0.100 231850.000
-    11    15   1    0.100 231850.000
-    12    16   1    0.100 231850.000
-    13    34   1    0.100 231850.000
-    27    31   1    0.100 231850.000
-    28    32   1    0.100 231850.000
-    29    33   1    0.100 231850.000
-    30    17   1    0.100 231850.000
-    44    48   1    0.100 231850.000
-    45    49   1    0.100 231850.000
-    46    50   1    0.100 231850.000
-    47    68   1    0.100 231850.000
-    61    65   1    0.100 231850.000
-    62    66   1    0.100 231850.000
-    63    67   1    0.100 231850.000
-    64    51   1    0.100 231850.000
-    78    82   1    0.100 231850.000
-    79    83   1    0.100 231850.000
-    80    84   1    0.100 231850.000
-    81   102   1    0.100 231850.000
-    95    99   1    0.100 231850.000
-    96   100   1    0.100 231850.000
-    97   101   1    0.100 231850.000
-    98    85   1    0.100 231850.000
-   112   116   1    0.100 231850.000
-   113   117   1    0.100 231850.000
-   114   118   1    0.100 231850.000
-   115   136   1    0.100 231850.000
-   129   133   1    0.100 231850.000
-   130   134   1    0.100 231850.000
-   131   135   1    0.100 231850.000
-   132   119   1    0.100 231850.000
-   146   150   1    0.100 231850.000
-   147   151   1    0.100 231850.000
-   148   152   1    0.100 231850.000
-   149   170   1    0.100 231850.000
-   163   167   1    0.100 231850.000
-   164   168   1    0.100 231850.000
-   165   169   1    0.100 231850.000
-   166   153   1    0.100 231850.000
-   180   184   1    0.100 231850.000
-   181   185   1    0.100 231850.000
-   182   186   1    0.100 231850.000
-   183   204   1    0.100 231850.000
-   197   201   1    0.100 231850.000
-   198   202   1    0.100 231850.000
-   199   203   1    0.100 231850.000
-   200   187   1    0.100 231850.000
-   214   218   1    0.100 231850.000
-   215   219   1    0.100 231850.000
-   216   220   1    0.100 231850.000
-   217   238   1    0.100 231850.000
-   231   235   1    0.100 231850.000
-   232   236   1    0.100 231850.000
-   233   237   1    0.100 231850.000
-   234   221   1    0.100 231850.000
-   248   252   1    0.100 231850.000
-   249   253   1    0.100 231850.000
-   250   254   1    0.100 231850.000
-   251   272   1    0.100 231850.000
-   265   269   1    0.100 231850.000
-   266   270   1    0.100 231850.000
-   267   271   1    0.100 231850.000
-   268   255   1    0.100 231850.000
+  10  14  1  0.100  231850.000
+  11  15  1  0.100  231850.000
+  12  16  1  0.100  231850.000
+  13  34  1  0.100  231850.000
+  27  31  1  0.100  231850.000
+  28  32  1  0.100  231850.000
+  29  33  1  0.100  231850.000
+  30  17  1  0.100  231850.000
+  44  48  1  0.100  231850.000
+  45  49  1  0.100  231850.000
+  46  50  1  0.100  231850.000
+  47  68  1  0.100  231850.000
+  61  65  1  0.100  231850.000
+  62  66  1  0.100  231850.000
+  63  67  1  0.100  231850.000
+  64  51  1  0.100  231850.000
+  78  82  1  0.100  231850.000
+  79  83  1  0.100  231850.000
+  80  84  1  0.100  231850.000
+  81  102  1  0.100  231850.000
+  95  99  1  0.100  231850.000
+  96  100  1  0.100  231850.000
+  97  101  1  0.100  231850.000
+  98  85  1  0.100  231850.000
+  112  116  1  0.100  231850.000
+  113  117  1  0.100  231850.000
+  114  118  1  0.100  231850.000
+  115  136  1  0.100  231850.000
+  129  133  1  0.100  231850.000
+  130  134  1  0.100  231850.000
+  131  135  1  0.100  231850.000
+  132  119  1  0.100  231850.000
+  146  150  1  0.100  231850.000
+  147  151  1  0.100  231850.000
+  148  152  1  0.100  231850.000
+  149  170  1  0.100  231850.000
+  163  167  1  0.100  231850.000
+  164  168  1  0.100  231850.000
+  165  169  1  0.100  231850.000
+  166  153  1  0.100  231850.000
+  180  184  1  0.100  231850.000
+  181  185  1  0.100  231850.000
+  182  186  1  0.100  231850.000
+  183  204  1  0.100  231850.000
+  197  201  1  0.100  231850.000
+  198  202  1  0.100  231850.000
+  199  203  1  0.100  231850.000
+  200  187  1  0.100  231850.000
+  214  218  1  0.100  231850.000
+  215  219  1  0.100  231850.000
+  216  220  1  0.100  231850.000
+  217  238  1  0.100  231850.000
+  231  235  1  0.100  231850.000
+  232  236  1  0.100  231850.000
+  233  237  1  0.100  231850.000
+  234  221  1  0.100  231850.000
+  248  252  1  0.100  231850.000
+  249  253  1  0.100  231850.000
+  250  254  1  0.100  231850.000
+  251  272  1  0.100  231850.000
+  265  269  1  0.100  231850.000
+  266  270  1  0.100  231850.000
+  267  271  1  0.100  231850.000
+  268  255  1  0.100  231850.000
 
 ; Else O-H bonds are rigid
 #else
 [ constraints ]
 ; ai    aj    funct     b0=r0
-    10    14   1    0.100
-    11    15   1    0.100
-    12    16   1    0.100
-    13    34   1    0.100
-    27    31   1    0.100
-    28    32   1    0.100
-    29    33   1    0.100
-    30    17   1    0.100
-    44    48   1    0.100
-    45    49   1    0.100
-    46    50   1    0.100
-    47    68   1    0.100
-    61    65   1    0.100
-    62    66   1    0.100
-    63    67   1    0.100
-    64    51   1    0.100
-    78    82   1    0.100
-    79    83   1    0.100
-    80    84   1    0.100
-    81   102   1    0.100
-    95    99   1    0.100
-    96   100   1    0.100
-    97   101   1    0.100
-    98    85   1    0.100
-   112   116   1    0.100
-   113   117   1    0.100
-   114   118   1    0.100
-   115   136   1    0.100
-   129   133   1    0.100
-   130   134   1    0.100
-   131   135   1    0.100
-   132   119   1    0.100
-   146   150   1    0.100
-   147   151   1    0.100
-   148   152   1    0.100
-   149   170   1    0.100
-   163   167   1    0.100
-   164   168   1    0.100
-   165   169   1    0.100
-   166   153   1    0.100
-   180   184   1    0.100
-   181   185   1    0.100
-   182   186   1    0.100
-   183   204   1    0.100
-   197   201   1    0.100
-   198   202   1    0.100
-   199   203   1    0.100
-   200   187   1    0.100
-   214   218   1    0.100
-   215   219   1    0.100
-   216   220   1    0.100
-   217   238   1    0.100
-   231   235   1    0.100
-   232   236   1    0.100
-   233   237   1    0.100
-   234   221   1    0.100
-   248   252   1    0.100
-   249   253   1    0.100
-   250   254   1    0.100
-   251   272   1    0.100
-   265   269   1    0.100
-   266   270   1    0.100
-   267   271   1    0.100
-   268   255   1    0.100
+  10  14  1  0.100
+  11  15  1  0.100
+  12  16  1  0.100
+  13  34  1  0.100
+  27  31  1  0.100
+  28  32  1  0.100
+  29  33  1  0.100
+  30  17  1  0.100
+  44  48  1  0.100
+  45  49  1  0.100
+  46  50  1  0.100
+  47  68  1  0.100
+  61  65  1  0.100
+  62  66  1  0.100
+  63  67  1  0.100
+  64  51  1  0.100
+  78  82  1  0.100
+  79  83  1  0.100
+  80  84  1  0.100
+  81  102  1  0.100
+  95  99  1  0.100
+  96  100  1  0.100
+  97  101  1  0.100
+  98  85  1  0.100
+  112  116  1  0.100
+  113  117  1  0.100
+  114  118  1  0.100
+  115  136  1  0.100
+  129  133  1  0.100
+  130  134  1  0.100
+  131  135  1  0.100
+  132  119  1  0.100
+  146  150  1  0.100
+  147  151  1  0.100
+  148  152  1  0.100
+  149  170  1  0.100
+  163  167  1  0.100
+  164  168  1  0.100
+  165  169  1  0.100
+  166  153  1  0.100
+  180  184  1  0.100
+  181  185  1  0.100
+  182  186  1  0.100
+  183  204  1  0.100
+  197  201  1  0.100
+  198  202  1  0.100
+  199  203  1  0.100
+  200  187  1  0.100
+  214  218  1  0.100
+  215  219  1  0.100
+  216  220  1  0.100
+  217  238  1  0.100
+  231  235  1  0.100
+  232  236  1  0.100
+  233  237  1  0.100
+  234  221  1  0.100
+  248  252  1  0.100
+  249  253  1  0.100
+  250  254  1  0.100
+  251  272  1  0.100
+  265  269  1  0.100
+  266  270  1  0.100
+  267  271  1  0.100
+  268  255  1  0.100
 
 ; End #ifdef AL_SURFACE_FLEXIBLE_OH
 #endif
 
 [ angles ]
 ; ai   aj   ak   funct   theta0    k_bend
-     1   148   152   1  109.470  251.040
-     1    27    31   1  109.470  251.040
-     1    28    32   1  109.470  251.040
-     1    30    17   1  109.470  251.040
-     2    11    15   1  109.470  251.040
-     2    12    16   1  109.470  251.040
-     2    27    31   1  109.470  251.040
-     2    30    17   1  109.470  251.040
-    18    10    14   1  109.470  251.040
-    18    79    83   1  109.470  251.040
-    18    13    34   1  109.470  251.040
-    18    29    33   1  109.470  251.040
-    19   146   150   1  109.470  251.040
-    19   149   170   1  109.470  251.040
-    19    28    32   1  109.470  251.040
-    19    29    33   1  109.470  251.040
-    35   182   186   1  109.470  251.040
-    35    61    65   1  109.470  251.040
-    35    62    66   1  109.470  251.040
-    35    64    51   1  109.470  251.040
-    36    45    49   1  109.470  251.040
-    36    46    50   1  109.470  251.040
-    36    61    65   1  109.470  251.040
-    36    64    51   1  109.470  251.040
-    52    44    48   1  109.470  251.040
-    52   113   117   1  109.470  251.040
-    52    47    68   1  109.470  251.040
-    52    63    67   1  109.470  251.040
-    53   180   184   1  109.470  251.040
-    53   183   204   1  109.470  251.040
-    53    62    66   1  109.470  251.040
-    53    63    67   1  109.470  251.040
-    69   216   220   1  109.470  251.040
-    69    95    99   1  109.470  251.040
-    69    96   100   1  109.470  251.040
-    69    98    85   1  109.470  251.040
-    70    79    83   1  109.470  251.040
-    70    80    84   1  109.470  251.040
-    70    95    99   1  109.470  251.040
-    70    98    85   1  109.470  251.040
-    86    78    82   1  109.470  251.040
-    86    11    15   1  109.470  251.040
-    86    81   102   1  109.470  251.040
-    86    97   101   1  109.470  251.040
-    87   214   218   1  109.470  251.040
-    87   217   238   1  109.470  251.040
-    87    96   100   1  109.470  251.040
-    87    97   101   1  109.470  251.040
-   103   250   254   1  109.470  251.040
-   103   129   133   1  109.470  251.040
-   103   130   134   1  109.470  251.040
-   103   132   119   1  109.470  251.040
-   104   113   117   1  109.470  251.040
-   104   114   118   1  109.470  251.040
-   104   129   133   1  109.470  251.040
-   104   132   119   1  109.470  251.040
-   120   112   116   1  109.470  251.040
-   120    45    49   1  109.470  251.040
-   120   115   136   1  109.470  251.040
-   120   131   135   1  109.470  251.040
-   121   248   252   1  109.470  251.040
-   121   251   272   1  109.470  251.040
-   121   130   134   1  109.470  251.040
-   121   131   135   1  109.470  251.040
-   137    12    16   1  109.470  251.040
-   137   163   167   1  109.470  251.040
-   137   164   168   1  109.470  251.040
-   137   166   153   1  109.470  251.040
-   138   147   151   1  109.470  251.040
-   138   148   152   1  109.470  251.040
-   138   163   167   1  109.470  251.040
-   138   166   153   1  109.470  251.040
-   154   146   150   1  109.470  251.040
-   154   215   219   1  109.470  251.040
-   154   149   170   1  109.470  251.040
-   154   165   169   1  109.470  251.040
-   155    10    14   1  109.470  251.040
-   155    13    34   1  109.470  251.040
-   155   164   168   1  109.470  251.040
-   155   165   169   1  109.470  251.040
-   171    46    50   1  109.470  251.040
-   171   197   201   1  109.470  251.040
-   171   198   202   1  109.470  251.040
-   171   200   187   1  109.470  251.040
-   172   181   185   1  109.470  251.040
-   172   182   186   1  109.470  251.040
-   172   197   201   1  109.470  251.040
-   172   200   187   1  109.470  251.040
-   188   180   184   1  109.470  251.040
-   188   249   253   1  109.470  251.040
-   188   183   204   1  109.470  251.040
-   188   199   203   1  109.470  251.040
-   189    44    48   1  109.470  251.040
-   189    47    68   1  109.470  251.040
-   189   198   202   1  109.470  251.040
-   189   199   203   1  109.470  251.040
-   205    80    84   1  109.470  251.040
-   205   231   235   1  109.470  251.040
-   205   232   236   1  109.470  251.040
-   205   234   221   1  109.470  251.040
-   206   215   219   1  109.470  251.040
-   206   216   220   1  109.470  251.040
-   206   231   235   1  109.470  251.040
-   206   234   221   1  109.470  251.040
-   222   214   218   1  109.470  251.040
-   222   147   151   1  109.470  251.040
-   222   217   238   1  109.470  251.040
-   222   233   237   1  109.470  251.040
-   223    78    82   1  109.470  251.040
-   223    81   102   1  109.470  251.040
-   223   232   236   1  109.470  251.040
-   223   233   237   1  109.470  251.040
-   239   114   118   1  109.470  251.040
-   239   265   269   1  109.470  251.040
-   239   266   270   1  109.470  251.040
-   239   268   255   1  109.470  251.040
-   240   249   253   1  109.470  251.040
-   240   250   254   1  109.470  251.040
-   240   265   269   1  109.470  251.040
-   240   268   255   1  109.470  251.040
-   256   248   252   1  109.470  251.040
-   256   181   185   1  109.470  251.040
-   256   251   272   1  109.470  251.040
-   256   267   271   1  109.470  251.040
-   257   112   116   1  109.470  251.040
-   257   115   136   1  109.470  251.040
-   257   266   270   1  109.470  251.040
-   257   267   271   1  109.470  251.040
+  1  148  152  1  109.470  251.040
+  1  27  31  1  109.470  251.040
+  1  28  32  1  109.470  251.040
+  1  30  17  1  109.470  251.040
+  2  11  15  1  109.470  251.040
+  2  12  16  1  109.470  251.040
+  2  27  31  1  109.470  251.040
+  2  30  17  1  109.470  251.040
+  18  10  14  1  109.470  251.040
+  18  79  83  1  109.470  251.040
+  18  13  34  1  109.470  251.040
+  18  29  33  1  109.470  251.040
+  19  146  150  1  109.470  251.040
+  19  149  170  1  109.470  251.040
+  19  28  32  1  109.470  251.040
+  19  29  33  1  109.470  251.040
+  35  182  186  1  109.470  251.040
+  35  61  65  1  109.470  251.040
+  35  62  66  1  109.470  251.040
+  35  64  51  1  109.470  251.040
+  36  45  49  1  109.470  251.040
+  36  46  50  1  109.470  251.040
+  36  61  65  1  109.470  251.040
+  36  64  51  1  109.470  251.040
+  52  44  48  1  109.470  251.040
+  52  113  117  1  109.470  251.040
+  52  47  68  1  109.470  251.040
+  52  63  67  1  109.470  251.040
+  53  180  184  1  109.470  251.040
+  53  183  204  1  109.470  251.040
+  53  62  66  1  109.470  251.040
+  53  63  67  1  109.470  251.040
+  69  216  220  1  109.470  251.040
+  69  95  99  1  109.470  251.040
+  69  96  100  1  109.470  251.040
+  69  98  85  1  109.470  251.040
+  70  79  83  1  109.470  251.040
+  70  80  84  1  109.470  251.040
+  70  95  99  1  109.470  251.040
+  70  98  85  1  109.470  251.040
+  86  78  82  1  109.470  251.040
+  86  11  15  1  109.470  251.040
+  86  81  102  1  109.470  251.040
+  86  97  101  1  109.470  251.040
+  87  214  218  1  109.470  251.040
+  87  217  238  1  109.470  251.040
+  87  96  100  1  109.470  251.040
+  87  97  101  1  109.470  251.040
+  103  250  254  1  109.470  251.040
+  103  129  133  1  109.470  251.040
+  103  130  134  1  109.470  251.040
+  103  132  119  1  109.470  251.040
+  104  113  117  1  109.470  251.040
+  104  114  118  1  109.470  251.040
+  104  129  133  1  109.470  251.040
+  104  132  119  1  109.470  251.040
+  120  112  116  1  109.470  251.040
+  120  45  49  1  109.470  251.040
+  120  115  136  1  109.470  251.040
+  120  131  135  1  109.470  251.040
+  121  248  252  1  109.470  251.040
+  121  251  272  1  109.470  251.040
+  121  130  134  1  109.470  251.040
+  121  131  135  1  109.470  251.040
+  137  12  16  1  109.470  251.040
+  137  163  167  1  109.470  251.040
+  137  164  168  1  109.470  251.040
+  137  166  153  1  109.470  251.040
+  138  147  151  1  109.470  251.040
+  138  148  152  1  109.470  251.040
+  138  163  167  1  109.470  251.040
+  138  166  153  1  109.470  251.040
+  154  146  150  1  109.470  251.040
+  154  215  219  1  109.470  251.040
+  154  149  170  1  109.470  251.040
+  154  165  169  1  109.470  251.040
+  155  10  14  1  109.470  251.040
+  155  13  34  1  109.470  251.040
+  155  164  168  1  109.470  251.040
+  155  165  169  1  109.470  251.040
+  171  46  50  1  109.470  251.040
+  171  197  201  1  109.470  251.040
+  171  198  202  1  109.470  251.040
+  171  200  187  1  109.470  251.040
+  172  181  185  1  109.470  251.040
+  172  182  186  1  109.470  251.040
+  172  197  201  1  109.470  251.040
+  172  200  187  1  109.470  251.040
+  188  180  184  1  109.470  251.040
+  188  249  253  1  109.470  251.040
+  188  183  204  1  109.470  251.040
+  188  199  203  1  109.470  251.040
+  189  44  48  1  109.470  251.040
+  189  47  68  1  109.470  251.040
+  189  198  202  1  109.470  251.040
+  189  199  203  1  109.470  251.040
+  205  80  84  1  109.470  251.040
+  205  231  235  1  109.470  251.040
+  205  232  236  1  109.470  251.040
+  205  234  221  1  109.470  251.040
+  206  215  219  1  109.470  251.040
+  206  216  220  1  109.470  251.040
+  206  231  235  1  109.470  251.040
+  206  234  221  1  109.470  251.040
+  222  214  218  1  109.470  251.040
+  222  147  151  1  109.470  251.040
+  222  217  238  1  109.470  251.040
+  222  233  237  1  109.470  251.040
+  223  78  82  1  109.470  251.040
+  223  81  102  1  109.470  251.040
+  223  232  236  1  109.470  251.040
+  223  233  237  1  109.470  251.040
+  239  114  118  1  109.470  251.040
+  239  265  269  1  109.470  251.040
+  239  266  270  1  109.470  251.040
+  239  268  255  1  109.470  251.040
+  240  249  253  1  109.470  251.040
+  240  250  254  1  109.470  251.040
+  240  265  269  1  109.470  251.040
+  240  268  255  1  109.470  251.040
+  256  248  252  1  109.470  251.040
+  256  181  185  1  109.470  251.040
+  256  251  272  1  109.470  251.040
+  256  267  271  1  109.470  251.040
+  257  112  116  1  109.470  251.040
+  257  115  136  1  109.470  251.040
+  257  266  270  1  109.470  251.040
+  257  267  271  1  109.470  251.040
 

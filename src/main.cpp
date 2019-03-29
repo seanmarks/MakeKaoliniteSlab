@@ -1,11 +1,5 @@
-// GenKaoliniteSlab.exe
-//
-// - A "layer" of kaolinite is created by translating the unit cell in the xy-plane
-//   - The hexagonal rings of Si and O are parallel to the face of the layer
-// - A "slab" of kaolinite is created by stacking slabs on top of each other
-
-
-// Project headers
+// TODO Break up code more (for readability and structure)
+// - Kaolinite.cpp ?!
 #include "main.h"
 
 int main(int argc, char* argv[])
@@ -40,7 +34,7 @@ int main(int argc, char* argv[])
 	double a = 0.51535; // [nm]
 	double b = 0.89419; // [nm]
 	double c = 0.73906; // [nm]
-	Real3 lattice_constants = {{ a, b, c }};
+	//Real3 lattice_constants = {{ a, b, c }};
 
 
 	//----- Fractional unit cell -----//
@@ -72,6 +66,7 @@ int main(int argc, char* argv[])
 	fractional_unit_cell[15] = {{ 0.03600, 0.50570, 0.73200 }}; // H-hydroxyl-3
 	fractional_unit_cell[16] = {{ 0.53400, 0.31540, 0.72800 }}; // H-hydroxyl-4
 
+
 	//----- Atom type parameters for [ moleculetype ] ----//
 
 	// Names of atoms for GROMACS
@@ -86,21 +81,43 @@ int main(int argc, char* argv[])
 	// - Note: "substituted" --> non-oxygen
 	// - Suffix "K" for kaolinite
 
-	// Start with Al and Si
-	std::vector<std::string> unit_cell_atom_names = { "AlOK", "AlOK", "SiTK", "SiTK" };
-	std::vector<double> unit_cell_atom_masses = { 26.982, 26.982, 28.086, 28.086 };
-	std::vector<double> unit_cell_atom_charges = { 1.575, 1.575, 2.1, 2.1 };
+	// TODO convert to maps
 
-	// OBK: bridging O
+	ClayFF clayff;
+
+	// Start with Al and Si
+	std::vector<std::string> unit_cell_atom_types(0);  
+	unit_cell_atom_types.reserve(num_atoms_per_primitive_cell);
+	unit_cell_atom_types.resize( unit_cell_atom_types.size()+2, "AlO_ClayFF");
+	unit_cell_atom_types.resize( unit_cell_atom_types.size()+2, "SiT_ClayFF" );
+
+	// OB_ClayFF: bridging O
 	// - First 2 are "interior" (apical?)
 	// - Other three are basal (form hexagonal rings with Si atoms)
+	unit_cell_atom_types.resize( unit_cell_atom_types.size()+5, "OB_ClayFF"  );
+
+	// OH_ClayFF: hydroxyl O coordinated with Al atoms
+	// HH_ClayFF: associated hydroxyl H
+	unit_cell_atom_types.resize( unit_cell_atom_types.size()+4, "OH_ClayFF"  );
+	unit_cell_atom_types.resize( unit_cell_atom_types.size()+4, "HH_ClayFF"  );
+
+	std::vector<std::string> unit_cell_atom_names( num_atoms_per_primitive_cell ); //= { "AlOK", "AlOK", "SiTK", "SiTK" };
+	std::vector<double> unit_cell_atom_masses( num_atoms_per_primitive_cell );     //= { 26.982, 26.982, 28.086, 28.086 };
+	std::vector<double> unit_cell_atom_charges( num_atoms_per_primitive_cell );    //= { 1.575,  1.575,  2.1,    2.1    };
+	for ( int i=0; i<num_atoms_per_primitive_cell; ++i ) {
+		const AtomType& atom_type = clayff.getAtomType( unit_cell_atom_types[i] );
+		unit_cell_atom_names[i]   = atom_type.name;
+		unit_cell_atom_masses[i]  = atom_type.mass;
+		unit_cell_atom_charges[i] = atom_type.charge;
+	}
+
+	/*
 	for ( int i=0; i<5; ++i ) {
 		unit_cell_atom_names.push_back( std::string("OBK") );
 		unit_cell_atom_masses.push_back( 16.000 );
 		unit_cell_atom_charges.push_back( -1.05 );
 	}
 
-	// OHK: hydroxyl O coordinated with Al atoms
 	for ( int i=0; i<4; ++i ) {
 		unit_cell_atom_names.push_back( std::string("OHK") );
 		unit_cell_atom_masses.push_back( 16.000 );
@@ -113,6 +130,7 @@ int main(int argc, char* argv[])
 		unit_cell_atom_masses.push_back( 1.008 );
 		unit_cell_atom_charges.push_back( 0.425 );
 	}
+	*/
 
 	//----- Use symmetry to construct a "full" unit cell -----//
 
@@ -127,6 +145,7 @@ int main(int argc, char* argv[])
 		}
 
 		// Extend parameter arrays
+		unit_cell_atom_types.push_back( unit_cell_atom_types[i] );
 		unit_cell_atom_names.push_back( unit_cell_atom_names[i] );
 		unit_cell_atom_masses.push_back( unit_cell_atom_masses[i] );
 		unit_cell_atom_charges.push_back( unit_cell_atom_charges[i] );
@@ -196,19 +215,25 @@ int main(int argc, char* argv[])
 	}
 
 
-	//----- Dipole of the unit cell -----//
+	//----- Unit cell properties -----//
 
+	// Net charge
+	double unit_cell_net_charge = 0.0;
+	for ( int i=0; i<num_atoms_per_unit_cell; ++i ) {
+		unit_cell_net_charge += unit_cell_atom_charges[i];
+	}
+	//std::cout << "Unit cell:  net charge = " << unit_cell_net_charge << " e\n";
+
+	// Dipole
 	Real3 unit_cell_dipole;  unit_cell_dipole.fill(0.0);
 	for ( int i=0; i<num_atoms_per_unit_cell; ++i ) {
 		for ( int d=0; d<DIM_; ++d ) {
 			unit_cell_dipole[d] += unit_cell_atom_charges[i]*unit_cell[i][d];
 		}
 	}
-
-	// Convert to Debyes
 	const double E_NM_PER_DEBYE = 0.0208194; // [(e*nm)/Debye]
 	for ( int d=0; d<DIM_; ++d ) { 
-		unit_cell_dipole[d] /= E_NM_PER_DEBYE; 
+		unit_cell_dipole[d] /= E_NM_PER_DEBYE; // Convert to Debyes
 	}
 
 
@@ -293,33 +318,32 @@ int main(int argc, char* argv[])
 	                            slab_residue_names, slab_atom_names, reflected_slab, slab_lengths );
 
 
+	// TODO write atomtypes to another file (.atp or .ff)
+
 	//----- Write an .itp file for the slab -----//
 
 	std::string itp_file("kaolinite_slab.itp");
 	std::ofstream ofs( itp_file );
 
-	ofs << "; Topology file fragment for KAO molecule" << "\n"
-	    << "; " << "\n"
+	ofs << "; Topology for a kaolinite slab modeled as a single molecule\n"
+	    << ";\n"
 	    << "; ifdef Flags" << "\n"
-	    << ";     AL_SURFACE_FLEXIBLE_OH: O-H bonds at the Al surface are flexible." << "\n"
-	    << ";     AL_SURFACE_FREE_H: free hydroxyl hydrogens at Al surface" << "\n"
-	    << ";     AL_SURFACE_FREE_OH: free hydroxyl groups at Al surface" << "\n"
-	    << "; " << "\n"
-	    << "; NOTE: For fully rigid kaolinite, use a freeze group" << "\n"
-	    << ";" << "\n"
-	    << "; Dipole of unit cell: " << "\n";
+	    << ";     AL_SURFACE_FLEXIBLE_OH: O-H bonds at the Al surface are flexible.\n"
+	    << ";     AL_SURFACE_FREE_H: free hydroxyl hydrogens at Al surface\n"
+	    << ";     AL_SURFACE_FREE_OH: free hydroxyl groups at Al surface\n"
+	    << ";\n"
+	    << "; NOTE: For fully rigid kaolinite, use a freeze group\n"
+	    << ";\n";
 
-	ofs << ";     mu = {";
+	ofs << "; Dipole of the unit cell: \n"
+	    << ";     mu = {";
 	for ( int d=0; d<DIM_; ++d ) {
-		ofs << std::setw(8) << std::fixed << std::setprecision(3) 
-		    << unit_cell_dipole[d];
-
+		ofs << " " << std::fixed << std::setprecision(3) << unit_cell_dipole[d];
 		if ( d != Z_DIM ) { ofs << ","; }
 	}
 	ofs << "} [Debye]" << "\n";
 
-	ofs << ";    |mu| = " << norm(unit_cell_dipole) << " [Debye]" << "\n"
-	    << ";" << "\n"
+	ofs << ";    |mu| = " << norm(unit_cell_dipole) << " [Debye]\n"
 	    << "\n";
 
 	// "Molecule" type declaration: kaolinite (KAO)
@@ -355,29 +379,29 @@ int main(int argc, char* argv[])
 			ofs << "  ";
 
 			// Atom index
-			ofs << std::setw(6) << (atom_counter + 1) << " ";
+			ofs << "  " << (atom_counter + 1) << " ";
 
 			// Atom type
-			ofs << std::left << std::setw(6) << unit_cell_atom_names[n] << " ";
+			ofs << std::left << "  " << unit_cell_atom_types[n] << " ";
 
 			// Residue/Molecule number
-			ofs << std::setw(6) << (molecule_counter + 1) << " ";
+			ofs << "  " << (molecule_counter + 1) << " ";
 
 			// Residue/Molecule name
-			ofs << std::left << std::setw(5) << "KAO" << " ";
+			ofs << std::left << "  " << "KAO" << " ";
 
 			// Atom name 
-			ofs << std::left << std::setw(7) << unit_cell_atom_names[n] << " ";
+			ofs << std::left << "  " << unit_cell_atom_names[n] << " ";
 
 			// Charge group index
-			ofs << std::setw(6) << (atom_counter + 1) << " ";
+			ofs << "  " << (atom_counter + 1) << " ";
 
 			// Charge
-			ofs << std::right << std::setw(8) << std::fixed << std::setprecision(5)
+			ofs << std::right << "  " << std::fixed << std::setprecision(5)
 			    << unit_cell_atom_charges[n] << " ";
 
 			// Mass
-			ofs << std::right << std::setw(8) << std::fixed << std::setprecision(3)
+			ofs << std::right << "  " << std::fixed << std::setprecision(3)
 			    << unit_cell_atom_masses[n] << " ";
 
 			// Done line
@@ -414,17 +438,13 @@ int main(int argc, char* argv[])
 			index_O = atom_index_offset + rel_indices_O[d];
 			index_H = atom_index_offset + rel_indices_H[d];
 
-			ofs << " " << std::setw(5) << (index_O + 1)
-			    << " " << std::setw(5) << (index_H + 1)
-			    << " " << std::setw(3) << bond_function
-			    << " " << std::setw(8) << r_0
-			    << " " << std::setw(8) << k_bond
-			    << "\n";
+			ofs << "  " << (index_O + 1) << "  " << (index_H + 1)
+			    << "  " << bond_function << "  " << r_0 << "  " << k_bond << "\n";
 		}
 	}
 	ofs << "\n";
 
-	// - Consraints for rigid O-H bonds
+	// - Constraints for rigid O-H bonds
 	ofs << "; Else O-H bonds are rigid" << "\n"
 	    << "#else" << "\n"
 	    << "[ constraints ]" << "\n"
@@ -437,11 +457,8 @@ int main(int argc, char* argv[])
 			index_O = atom_index_offset + rel_indices_O[d];
 			index_H = atom_index_offset + rel_indices_H[d];
 
-			ofs << " " << std::setw(5) << (index_O + 1)
-			    << " " << std::setw(5) << (index_H + 1)
-			    << " " << std::setw(3) << constraint_function
-			    << " " << std::setw(8) << r_0
-			    << "\n";
+			ofs << "  " << (index_O + 1) << "  " << (index_H + 1)
+			    << "  " << constraint_function << "  " << r_0 << "\n";
 		}
 	}
 
@@ -496,8 +513,7 @@ int main(int argc, char* argv[])
 				// first unit cell
 				int index_M, index_O, index_H;
 
-				//----- Al(0) -----//
-
+				// Connectivity for bond angles
 				std::vector<std::array<int,4>> bond_angles = {{
 					// Key:  Al_atom_offset,  cell_with_OH,  O_atom_offset,  H_atom_offset
 					// Al(0)
@@ -531,13 +547,8 @@ int main(int argc, char* argv[])
 					index_O = num_atoms_per_unit_cell*bond_angles[k][1] + bond_angles[k][2];
 					index_H = num_atoms_per_unit_cell*bond_angles[k][1] + bond_angles[k][3];
 
-					ofs << " " << std::setw(5) << (index_M + 1)
-							<< " " << std::setw(5) << (index_O + 1)
-					    << " " << std::setw(5) << (index_H + 1)
-							<< " " << std::setw(3) << angleFunction
-							<< " " << std::setw(8) << theta_0
-					    << " " << std::setw(8) << k_bend
-							<< "\n";
+					ofs << "  " << (index_M + 1) << "  " << (index_O + 1) << "  " << (index_H + 1)
+							<< "  " << angleFunction << "  " << theta_0 << "  " << k_bend << "\n";
 				}
 			}
 		}
@@ -652,7 +663,7 @@ int main(int argc, char* argv[])
 	ofs << "[ KAO_FROZEN_ATOMS_FREE_H ]" << "\n";
 
 	for ( int i=0; i<num_frozen_atoms_free_H; ++i ) {
-		ofs << std::setw(8) << frozen_atoms_free_H[i] << "\t";
+		ofs << " " << frozen_atoms_free_H[i] + 1;
 		if ( line_counter < num_atoms_per_line ) {
 			++line_counter;
 		}
@@ -672,7 +683,7 @@ int main(int argc, char* argv[])
 	line_counter = 0;
 
 	for ( int i=0; i<num_frozen_atoms_free_OH; ++i ) {
-		ofs << std::setw(8) << frozen_atoms_free_OH[i] << "\t";
+		ofs << " " << frozen_atoms_free_OH[i] + 1;
 		if ( line_counter < num_atoms_per_line ) {
 			++line_counter;
 		}
@@ -700,9 +711,7 @@ int main(int argc, char* argv[])
 
 	for ( int l=0; l<num_layers; ++l ) {
 		for ( int i=0; i<num_frozen_atoms_free_H; ++i ) {
-			ofs << std::setw(8) 
-			    << (frozen_atoms_free_H[i] + layer_atom_offsets[l] + 1) 
-			    << "\t";
+			ofs << " " << (frozen_atoms_free_H[i] + layer_atom_offsets[l] + 1);
 
 			if ( line_counter < num_atoms_per_line ) {
 				++line_counter;
@@ -724,9 +733,7 @@ int main(int argc, char* argv[])
 
 	for ( int l=0; l<num_layers; ++l ) {
 		for ( int i=0; i<num_frozen_atoms_free_OH; ++i ) {
-			ofs << std::setw(8) 
-			    << (frozen_atoms_free_OH[i] + layer_atom_offsets[l] + 1) 
-			    << "\t";
+			ofs << " " << (frozen_atoms_free_OH[i] + layer_atom_offsets[l] + 1);
 
 			if ( line_counter < num_atoms_per_line ) {
 				++line_counter;
@@ -741,6 +748,102 @@ int main(int argc, char* argv[])
 	ofs << "\n";
 
 	ofs.close();
+
+
+	//----- Position Restraints -----//
+
+	// Standard position restraints
+	double k_restr = 1.0e3;  // restraint strength (kJ/mol/nm^2)
+	std::string restr_comment("funct       fcx        fcy        fcz  [kJ/mol/nm^2]");
+	int funct = 1;
+	std::stringstream param_ss;
+	param_ss << funct;
+	for ( int d=0; d<DIM_; ++d ) {
+		param_ss << "    " << k_restr;
+	}
+
+	// Position restraints for Si atoms in the lowest layer
+	std::vector<int> indices_posre_Si;
+	atom_counter = 0;
+	Int3 cell_indices;
+	for ( cell_indices[X_DIM]=0; cell_indices[X_DIM]<unit_cell_grid[0]; ++cell_indices[X_DIM] ) {
+		for ( cell_indices[Y_DIM]=0; cell_indices[Y_DIM]<unit_cell_grid[1]; ++cell_indices[Y_DIM] ) {
+			// Only consider the lowest layer
+			cell_indices[Z_DIM] = 0;
+
+			int cell_index = getLinearCellIndex( cell_indices, unit_cell_grid);
+			int atom_index_offset = num_atoms_per_unit_cell*cell_index;
+			int atom_index;
+			for ( int i=0; i<num_atoms_per_unit_cell; ++i ) {
+				atom_index = atom_index_offset + i;
+				if ( slab_atom_names[atom_index].find("Si") == 0 ) {
+					indices_posre_Si.push_back(atom_index);
+				}
+			}
+		}
+	}
+	std::string posre_Si_file("posre_Si.itp");
+	std::string posre_Si_header("Position restraints for Si atoms in bottom layer of each slab");
+	writePositionRestraints( posre_Si_file, posre_Si_header, indices_posre_Si,
+	                         restr_comment, param_ss.str() );
+	writeIndexFile( "posre_Si.ndx", "Si atoms with position restraints (normal slab)",
+	                "posre_Si", indices_posre_Si );
+
+	// Position restraints for Al atoms in highest layer
+	std::vector<int> indices_posre_Al;
+	atom_counter = 0;
+	for ( cell_indices[X_DIM]=0; cell_indices[X_DIM]<unit_cell_grid[0]; ++cell_indices[X_DIM] ) {
+		for ( cell_indices[Y_DIM]=0; cell_indices[Y_DIM]<unit_cell_grid[1]; ++cell_indices[Y_DIM] ) {
+			// Only consider the topmost layer
+			cell_indices[Z_DIM] = unit_cell_grid[Z_DIM] - 1;
+
+			int cell_index = getLinearCellIndex( cell_indices, unit_cell_grid);
+			int atom_index_offset = num_atoms_per_unit_cell*cell_index;
+			int atom_index;
+			for ( int i=0; i<num_atoms_per_unit_cell; ++i ) {
+				atom_index = atom_index_offset + i;
+				if ( slab_atom_names[atom_index].find("Al") == 0 ) {
+					indices_posre_Al.push_back(atom_index);
+				}
+			}
+		}
+	}
+	std::string posre_Al_file("posre_Al.itp");
+	std::string posre_Al_header("Position restraints for Al atoms in top layer of each slab");
+	writePositionRestraints( posre_Al_file, posre_Al_header, indices_posre_Al,
+	                         restr_comment, param_ss.str() );
+	writeIndexFile( "posre_Al.ndx", "Al atoms with position restraints (normal slab)",
+	                "posre_Al", indices_posre_Al );
+
+	// Flat-bottomed position restraints for heavy atoms
+	std::vector<int> unit_cell_heavy_atoms;  // find heavy atoms in the unit cell
+	for ( int i=0; i<num_atoms_per_unit_cell; ++i ) {
+		if ( unit_cell_atom_names[i].find("H") != 0 ) {
+			unit_cell_heavy_atoms.push_back(i);
+		}
+	}
+	int num_heavy_atoms_per_unit_cell = unit_cell_heavy_atoms.size();
+	int num_heavy_atoms_per_slab      = num_heavy_atoms_per_unit_cell*num_unit_cells_per_slab;
+	std::vector<int> slab_heavy_atoms;  slab_heavy_atoms.reserve(num_heavy_atoms_per_slab);
+	for ( int i=0; i<num_unit_cells_per_slab; ++i ) {  // loop over cells in the slab
+		int atom_index_offset = num_atoms_per_unit_cell*i;
+		for ( int j=0; j<num_heavy_atoms_per_unit_cell; ++j ) {
+			slab_heavy_atoms.push_back( atom_index_offset + unit_cell_heavy_atoms[j] );
+		}
+	}
+	std::string posre_heavy_file("posre_kao_heavy.itp");
+	std::string posre_heavy_header("Position restraints for heavy atoms in each slab");
+	restr_comment = "funct  g      r[nm]     k[kJ/mol/nm^2]";
+	funct = 2;
+	double g_restr = 1;
+	double r_restr = 0.35;  // distance a particle must move before restraint becomes active [nm]
+	k_restr = 1.0e4;        // restraint strength (kJ/mol/nm^2)
+	param_ss.str("");  param_ss.clear();  // reset stringstream
+	param_ss << funct   << "    " << g_restr << "    " << r_restr << "    " << k_restr;
+	writePositionRestraints( posre_heavy_file, posre_heavy_header, slab_heavy_atoms,
+	                         restr_comment, param_ss.str() );
+	writeIndexFile( "kao_heavy.ndx", "Kaolinite heavy atoms (normal slab)",
+	                "kao_heavy", slab_heavy_atoms );
 }
 
 
@@ -775,3 +878,36 @@ double angleBetweenVectors(const Real3& a, const Real3& b)
 	return theta;
 }
 
+
+void writePositionRestraints(
+	const std::string& posre_file, const std::string& header, const std::vector<int>& atom_indices,
+	const std::string& parameter_comment, const std::string& parameters)
+{
+	std::ofstream ofs(posre_file);
+	ofs << "; " << header << "\n"
+	    << "[ position_restraints ]\n"
+	    << "; i     " << parameter_comment << "\n";
+
+	int num_atoms = atom_indices.size();
+	for ( int i=0; i<num_atoms; ++i ) {
+		ofs << " " << atom_indices[i] + 1 << "    " << parameters << "\n";
+	}
+}
+
+void writeIndexFile(
+	const std::string& ndx_file, const std::string& header, const std::string& group_name,
+	const std::vector<int>& atom_indices, const int num_atoms_per_line)
+{
+	std::ofstream ofs(ndx_file);
+	ofs << "; " << header << "\n"
+	    << "[ " << group_name << " ]\n";
+
+	int num_atoms = atom_indices.size();
+	for ( int i=0; i<num_atoms; ++i ) {
+		ofs << " " << atom_indices[i] + 1;
+		if ( i > 0 and (i % num_atoms_per_line == 0) ) {
+			ofs << "\n";
+		}
+	}
+	ofs << "\n";
+}

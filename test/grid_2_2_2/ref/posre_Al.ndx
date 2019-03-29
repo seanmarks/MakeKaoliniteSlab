@@ -1,0 +1,3 @@
+; Al atoms with position restraints (normal slab)
+[ posre_Al ]
+ 35 36 52 53 103 104 120 121 171 172 188 189 239 240 256 257

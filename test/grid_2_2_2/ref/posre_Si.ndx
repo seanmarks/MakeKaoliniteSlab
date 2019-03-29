@@ -1,0 +1,3 @@
+; Si atoms with position restraints (normal slab)
+[ posre_Si ]
+ 3 4 20 21 71 72 88 89 139 140 156 157 207 208 224 225
