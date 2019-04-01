@@ -35,7 +35,6 @@ backup*/*
 
 # Executables
 *.exe
-*.out
 *.app
 
 # Temp files
